@@ -2,7 +2,15 @@
 
     <div class="card">
         <div class="card-header">Bienvenue sur le Bêtisier de l'IUT</div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia dolore maiores ducimus doloribus, fugiat quae corporis iste non, odit, aliquid dicta maxime quo expedita minima voluptate nulla! Illo, consequatur ab!</p>
+        {{#if session.userid}}
+        <h4>Meilleure blague</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus excepturi ipsum iusto placeat nulla, voluptate consequatur non laborum quo possimus facere reiciendis voluptatem provident labore neque maiores debitis, necessitatibus. Aspernatur.</p>
+        {{else}}
+        <p>Venez découvrir les blagues les plus tordantes !</p>
+        <div horizontal center-justified layout>
+            <paper-button><a href="/login">Se connecter</a></paper-button>
+        </div>
+        {{/if}}
     </div>
 
 </div>

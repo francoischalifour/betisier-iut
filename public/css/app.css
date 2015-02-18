@@ -105,6 +105,10 @@ core-toolbar {
     }
 }
 
+.header-description a {
+    color: #fff;
+}
+
 #navmenu {
     color: #666;
     background-color: #fff;

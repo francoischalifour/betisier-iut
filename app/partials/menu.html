@@ -9,16 +9,19 @@
         <a href="/people/all">Liste des personnes</a>
     </paper-item>
 
+    {{#if session.userid}}
     <paper-item class="divider">
         <core-icon icon="social:person-add"></core-icon>
         <a href="/people/create">Ajouter une personne</a>
     </paper-item>
+    {{/if}}
 
     <paper-item>
         <core-icon icon="editor:format-quote"></core-icon>
         <a href="/citations/all">Liste des citations</a>
     </paper-item>
 
+    {{#if session.userid}}
     <paper-item>
         <core-icon icon="add"></core-icon>
         <a href="/citations/create">Ajouter une citation</a>
@@ -28,14 +31,17 @@
         <core-icon icon="search"></core-icon>
         <a href="/citations/search">Rechercher une citation</a>
     </paper-item>
+    {{/if}}
 
     <paper-item>
         <core-icon icon="social:location-city"></core-icon>
         <a href="/villes/all">Liste des villes</a>
     </paper-item>
 
+    {{#if session.userid}}
     <paper-item>
         <core-icon icon="add-circle-outline"></core-icon>
         <a href="/villes/create">Ajouter une ville</a>
     </paper-item>
+    {{/if}}
 </core-menu>

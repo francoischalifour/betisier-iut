@@ -35,6 +35,12 @@ module.exports.List = function(req, res) {
  * @param {object} res
  */
 module.exports.View = function(req, res) {
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
+
     var per_num = req.params.id;
 
     Personne.getPersonneById(per_num, function(err, result) {
@@ -62,6 +68,12 @@ module.exports.View = function(req, res) {
  * @param {object} res
  */
 module.exports.Create = function(req, res) {
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
+
     res.title = 'Ajouter une personne';
 
     if (req.method == 'POST') {

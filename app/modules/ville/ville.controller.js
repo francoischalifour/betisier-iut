@@ -31,6 +31,12 @@ module.exports.List = function(req, res) {
  * @param {object} res
  */
 module.exports.Create = function(req, res) {
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
+
     res.title = 'Ajouter une ville';
 
     if (req.method == 'POST') {
@@ -56,6 +62,12 @@ module.exports.Create = function(req, res) {
  * @param {object} res
  */
 module.exports.Edit = function(req, res) {
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
+
     res.title = 'Modifier une ville';
     var vil_num = req.params.id;
 
@@ -90,6 +102,12 @@ module.exports.Edit = function(req, res) {
  * @param {object} res
  */
 module.exports.Delete = function(req, res) {
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
+
     res.title = 'Supprimer une ville';
 
     var vil_num = req.params.id;

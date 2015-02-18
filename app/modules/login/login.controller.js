@@ -10,12 +10,13 @@ var path = './login/views/';
  * @param {object} res
  */
 module.exports.Login = function(req, res) {
-    res.title = 'Connexion';
-
+    // If the user is already logged in.
     if (req.session.userid && req.session.username) {
         res.redirect('/');
         return;
     }
+
+    res.title = 'Connexion';
 
     if (req.method == 'POST') {
         var data = req.body;
@@ -45,6 +46,12 @@ module.exports.Login = function(req, res) {
  * @param {object} res
  */
 module.exports.Logout = function(req, res) {
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
+
     res.title = 'Déconnexion';
 
     req.session.login = '';
