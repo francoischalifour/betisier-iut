@@ -1,0 +1,35 @@
+{{#if nbResultat}}
+<p class="text-center">Il y a {{nbResultat}} résultats pour cette recherche.</p>
+
+<table>
+    <tr>
+        <th>Auteur</th>
+        <th>Citation</th>
+        <th>Date</th>
+        <th>Note</th>
+        <th>Action</th>
+    </tr>
+    {{#each listeResultat}}
+    <tr>
+        <td>{{per_prenom}} {{per_nom}}</td>
+        <td>{{cit_libelle}}</td>
+        <td>{{cit_date}}</td>
+        <td>{{vot_valeur}}</td>
+        <td>
+            <a href="citations/{{cit_num}}/edit">
+                <core-icon icon="editor:mode-edit"></core-icon>
+            </a>
+            <a href="citations/{{cit_num}}/delete">
+                <core-icon icon="delete"></core-icon>
+            </a>
+        </td>
+    </tr>
+    {{/each}}
+</table>
+{{else}}
+<p class="text-center">Il n'y a aucun résultat pour cette recherche.</p>
+{{/if}}
+
+<p class="text-center">
+    <paper-button><a href="/citations/search">Faire une nouvelle recherche</a></paper-button>
+</p>

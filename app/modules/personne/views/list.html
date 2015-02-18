@@ -1,0 +1,22 @@
+{{#if nbPersonne}}
+<p class="text-center">Il y a {{nbPersonne}} personnes enregistrées.</p>
+
+<table>
+    <tr>
+        <th>Prénom</th>
+        <th>Nom</th>
+    </tr>
+    {{#each listePersonne}}
+    <tr>
+        <td><a href="/people/{{per_num}}">{{per_prenom}}</a></td>
+        <td><a href="/people/{{per_num}}">{{per_nom}}</a></td>
+    </tr>
+    {{/each}}
+</table>
+{{else}}
+<p class="text-center">Il n'y a actuellement aucune personne enregistrée.</p>
+{{/if}}
+
+<a href="/people/create" title="Ajouter une personne">
+    <paper-fab icon="social:person-add"></paper-fab>
+</a>

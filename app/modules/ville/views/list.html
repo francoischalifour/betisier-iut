@@ -1,0 +1,32 @@
+{{#if nbVille}}
+<p class="text-center">Il y a {{nbVille}} villes enregistrées.</p>
+
+<table>
+    <tr>
+        <th>Nom</th>
+        <th width="100">Modifier</th>
+        <th width="100">Supprimer</th>
+    </tr>
+    {{#each listeVille}}
+    <tr>
+        <td>{{vil_nom}}</td>
+        <td class="text-center">
+            <a href="/villes/{{vil_num}}/edit">
+                <core-icon icon="editor:mode-edit"></core-icon>
+            </a>
+        </td>
+        <td class="text-center">
+            <a href="/villes/{{vil_num}}/delete">
+                <core-icon icon="delete"></core-icon>
+            </a>
+        </td>
+    </tr>
+    {{/each}}
+</table>
+{{else}}
+<p class="text-center">Il n'y a actuellement aucune ville enregistrée.</p>
+{{/if}}
+
+<a href="/villes/create" title="Ajouter une ville">
+    <paper-fab icon="add"></paper-fab>
+</a>

@@ -1,0 +1,38 @@
+{{#if nbCitation}}
+<p class="text-center">Il y a {{nbCitation}} citations enregistrées.</p>
+
+<table>
+    <tr>
+        <th>Auteur</th>
+        <th>Citation</th>
+        <th>Date</th>
+        <th>Note</th>
+        <th>Editer</th>
+        <th>Supprimer</th>
+    </tr>
+    {{#each listeCitation}}
+    <tr>
+        <td><a href="/people/{{per_num}}">{{per_prenom}} {{per_nom}}</a></td>
+        <td>{{cit_libelle}}</td>
+        <td>{{cit_date}}</td>
+        <td>{{#if vot_valeur}}{{vot_valeur}}{{else}}-{{/if}}</td>
+        <td class="text-center">
+            <a href="/citations/{{cit_num}}/edit">
+                <core-icon icon="editor:mode-edit"></core-icon>
+            </a>
+        </td>
+        <td class="text-center">
+            <a href="/citations/{{cit_num}}/delete">
+                <core-icon icon="delete"></core-icon>
+            </a>
+        </td>
+    </tr>
+    {{/each}}
+</table>
+{{else}}
+<p class="text-center">Il n'y a actuellement aucune citation enregistrée.</p>
+{{/if}}
+
+<a href="/citations/create" title="Ajouter une citation">
+    <paper-fab icon="add"></paper-fab>
+</a>

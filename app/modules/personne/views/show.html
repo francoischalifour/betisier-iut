@@ -1,0 +1,59 @@
+{{#if user.per_nom}}
+<div layout horizontal center-justified>
+    <div class="card">
+
+        <div class="card-header">{{user.per_prenom}} {{user.per_nom}}</div>
+
+        <p>
+            <core-icon icon="communication:phone"></core-icon>
+            {{user.per_tel}}
+        </p>
+
+        <p>
+            <core-icon icon="mail"></core-icon>
+            <a href="mailto:{{user.per_mail}}">{{user.per_mail}}</a>
+        </p>
+
+        {{#if user.dep_nom}}
+        <p>
+            <core-icon icon="social:domain"></core-icon>
+            {{user.dep_nom}}
+        </p>
+
+        <p>
+            <core-icon icon="social:location-city"></core-icon>
+            {{user.vil_nom}}
+        </p>
+        {{else}}
+        <p>
+            <core-icon icon="communication:phone"></core-icon>
+            {{user.sal_telprof}}
+        </p>
+
+        <p>
+            <core-icon icon="label"></core-icon>
+            {{user.fon_libelle}}
+        </p>
+        {{/if}}
+    </div>
+</div>
+
+<div layout horizontal center-justified>
+    <paper-button>
+        <core-icon icon="editor:mode-edit"></core-icon>
+        Modifier mon profil
+    </paper-button>
+
+    <paper-button>
+        <core-icon icon="delete"></core-icon>
+        Supprimer mon profil
+    </paper-button>
+</div>
+{{else}}
+<p class="text-center">Cet utilisateur n'existe pas.</p>
+<p class="text-center">
+    <paper-button>
+        <a href="/people/all">Retour à la liste des utilisateurs</a>
+    </paper-button>
+</p>
+{{/if}}

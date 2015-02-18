@@ -1,0 +1,134 @@
+<div vertical center layout flex>
+
+    <div class="card">
+        <div class="card-header">Nouvelle personne</div>
+
+        <form action="#" method="post">
+            <paper-input-decorator floatingLabel label="Prénom de la personne">
+                <input is="core-input" name="per_prenom">
+            </paper-input-decorator>
+
+            <paper-input-decorator floatingLabel label="Nom de la personne">
+                <input is="core-input" name="per_nom">
+            </paper-input-decorator>
+
+            <paper-input-decorator floatingLabel label="Adresse e-mail de la personne">
+                <input is="core-input" type="email" name="per_mail">
+            </paper-input-decorator>
+
+            <paper-input-decorator floatingLabel label="Téléphone de la personne">
+                <input is="core-input" type="tel" name="per_tel">
+            </paper-input-decorator>
+
+            <paper-input-decorator floatingLabel label="Login de la personne">
+                <input is="core-input" name="per_login">
+            </paper-input-decorator>
+
+            <paper-input-decorator floatingLabel label="Mot de passe de la personne">
+                <input is="core-input" type="password" name="per_pwd">
+            </paper-input-decorator>
+
+            <!-- <paper-radio-group selected="isEtudiant" id="type" horizontal center-justified layout onclick="togglePanel()">
+                <paper-radio-button name="isEtudiant" label="Etudiant"></paper-radio-button>
+                <paper-radio-button name="isSalarie" label="Salarié"></paper-radio-button>
+            </paper-radio-group> -->
+
+            <div horizontal center-justified layout>
+                <label for="isEtudiant">Etudiant</label>
+                <input type="radio" name="pers_type" id="isEtudiant" value="0" checked="checked">
+                <label for="isSalarie">Salarié</label>
+                <input type="radio" name="pers_type" id="isSalarie" value="1">
+            </div>
+
+            <div id="etudiantPanel">
+                <p>
+                    <label for="dep_num">Département</label>
+                    <select name="dep_num" id="dep_num">
+                        <option value="-1" disabled="disabled">Sélectionnez un département</option>
+                        {{#each listeDepartement}}
+                        <option value="{{dep_num}}">{{dep_nom}}</option>
+                        {{/each}}
+                    </select>
+                </p>
+
+                <p>
+                    <label for="div_num">Division</label>
+                    <select name="div_num" id="div_num">
+                        <option value="-1" disabled="disabled">Sélectionnez une division</option>
+                        {{#each listeDivision}}
+                        <option value="{{div_num}}">{{div_nom}}</option>
+                        {{/each}}
+                    </select>
+                </p>
+            </div>
+
+            <div id="salariePanel">
+                <paper-input-decorator floatingLabel label="Téléphone professionnel" flex>
+                    <input is="core-input" type="tel" name="telPro" id="telPro">
+                </paper-input-decorator>
+
+                <p>
+                    <label for="fon_num">Fonction</label>
+                    <select name="fon_num" id="fon_num">
+                        <option value="-1" disabled="disabled">Sélectionnez une fonction</option>
+                        {{#each listeFonction}}
+                        <option value="{{fon_num}}">{{fon_libelle}}</option>
+                        {{/each}}
+                    </select>
+                </p>
+            </div>
+
+            <div horizontal center-justified layout>
+                <button type="submit" is="paper-button-submit">
+                    <core-icon icon="check"></core-icon>
+                    Ajouter
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script>
+(function() {
+    var etudiantPanel = document.getElementById('etudiantPanel');
+    var salariePanel = document.getElementById('salariePanel');
+    var etudiantButton = document.getElementById('isEtudiant');
+    var salarieButton = document.getElementById('isSalarie');
+
+    salariePanel.style.display = 'none';
+
+    etudiantButton.onchange = togglePanel;
+    salarieButton.onchange = togglePanel;
+
+    /**
+     * Toggles etudiant / salarie panels.
+     */
+    function togglePanel() {
+        if (etudiantButton.checked) {
+            salariePanel.style.display = 'none';
+            etudiantPanel.style.display = 'block';
+        } else {
+            salariePanel.style.display = 'block';
+            etudiantPanel.style.display = 'none';
+        }
+    }
+})();
+</script>
+
+<script>
+/*    var etudiantPanel = document.getElementById('etudiantPanel');
+    var salariePanel = document.getElementById('salariePanel');
+
+    salariePanel.style.display = 'none';
+
+    function togglePanel() {
+        if (salariePanel.style.display == 'none') {
+            salariePanel.style.display = 'block';
+            etudiantPanel.style.display = 'none';
+        } else {
+            salariePanel.style.display = 'none';
+            etudiantPanel.style.display = 'block';
+        }
+    }*/
+</script>

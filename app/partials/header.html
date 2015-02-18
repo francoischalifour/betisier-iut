@@ -1,0 +1,20 @@
+<search-bar></search-bar>
+<paper-menu-button>
+    <paper-icon-button icon="account-circle"></paper-icon-button>
+    <paper-dropdown halign="right" class="dropdown open-below">
+        <core-menu>
+            {{#if session.userid}}
+            <paper-item>
+                <a href="/people/{{session.userid}}">Mon compte</a>
+            </paper-item>
+            <paper-item>
+                <a href="/logout">Déconnexion</a>
+            </paper-item>
+            {{else}}
+            <paper-item>
+                <a href="/login">Connexion</a>
+            </paper-item>
+            {{/if}}
+        </core-menu>
+    </paper-dropdown>
+</paper-menu-button>

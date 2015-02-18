@@ -1,0 +1,25 @@
+{{#if session.userid}}
+<p>Vous êtes maintenant connecté.</p>
+{{else}}
+<div horizontal center-justified layout>
+
+    <div class="card">
+        <form action="#" method="post">
+            <paper-input-decorator floatingLabel label="Nom d'utilisateur">
+                <input is="core-input" name="login" id="login">
+            </paper-input-decorator>
+
+            <paper-input-decorator floatingLabel label="Mot de passe">
+                <input is="core-input" type="password" name="password" id="password">
+            </paper-input-decorator>
+
+            <div horizontal center-justified layout>
+                <button type="submit" is="paper-button-submit">
+                    Se connecter
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+{{/if}}

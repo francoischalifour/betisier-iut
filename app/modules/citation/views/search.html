@@ -1,0 +1,48 @@
+<div horizontal center-justified layout>
+    <div class="card">
+
+        <form action="#" method="post">
+            <p>
+                <label for="per_num">Nom de la personne</label>
+                <select name="per_num" id="per_num">
+                    <option value="0">Sélectionnez une personne</option>
+                    {{#each listePersonne}}
+                    <option value="{{per_num}}">{{per_nom}}</option>
+                    {{/each}}
+                </select>
+            </p>
+
+            <p>
+                <label for="cit_date">Date</label>
+                <select name="cit_date" id="cit_date">
+                    <option value="0">Sélectionnez une date</option>
+                    {{#each listeDate}}
+                    <option value="{{cit_date}}">{{cit_date}}</option>
+                    {{/each}}
+                </select>
+            </p>
+
+            <p>
+                <label for="vot_valeur">Note</label>
+                <select name="vot_valeur" id="vot_valeur">
+                    <option value="0">Sélectionnez une note</option>
+                    {{#each listeNote}}
+                    <option value="{{vot_valeur}}">{{vot_valeur}}</option>
+                    {{/each}}
+                </select>
+            </p>
+
+            <paper-input-decorator label="Mots recherchés...">
+                <input type="search" name="search">
+            </paper-input-decorator>
+
+            <div horizontal center-justified layout>
+                <button type="submit" is="paper-button-submit">
+                    <core-icon icon="search"></core-icon>
+                    Rechercher
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>

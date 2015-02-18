@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#263238">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <title>{{title}} - Bêtisier de l'IUT</title>
+
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="icon" sizes="192x192" href="img/logo.png">
+
+    <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
+
+    <link rel="import" href="/bower_components/font-roboto/roboto.html">
+    <link rel="import" href="/bower_components/core-elements/core-elements.html">
+    <link rel="import" href="/bower_components/paper-elements/paper-elements.html">
+    <link rel="import" href="/bower_components/core-icons/social-icons.html">
+    <link rel="import" href="/bower_components/core-icons/editor-icons.html">
+    <link rel="import" href="/bower_components/core-icons/communication-icons.html">
+    <link rel="import" href="/elements/search-bar.html">
+    <link rel="import" href="/elements/profile-img.html">
+    <link rel="import" href="/elements/paper-button-submit.html">
+</head>
+
+<body fullbleed unresolved>
+    <core-drawer-panel id="drawerPanel">
+
+        <core-header-panel drawer id="navmenu" mode="seamed">
+            <core-toolbar id="navheader" class="tall">
+                <div class="middle" horizontal layout center-center fit>
+                </div>
+            </core-toolbar>
+
+            {{> menu}}
+        </core-header-panel>
+
+        <core-header-panel main mode="waterfall-tall">
+            <core-toolbar id="mainheader">
+                <paper-icon-button id="navicon" icon="menu"></paper-icon-button>
+                <span class="header-title middle indent">{{title}}</span>
+                <span class="header-description bottom indent">Bêtisier de l'IUT {{session.username}}</span>
+                <span flex></span>
+                {{> header}}
+            </core-toolbar>
+
+            <div class="content">
+                {{{body}}}
+            </div>
+        </core-header-panel>
+
+    </core-drawer-panel>
+
+    <script src="/js/app-drawer.js"></script>
+</body>
+
+</body>
+
+</html>
