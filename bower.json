@@ -1,0 +1,23 @@
+{
+  "name": "betisier-iut",
+  "version": "1.0.0",
+  "authors": [
+    "francoischalifour <francois.chalifour@gmail.com>"
+  ],
+  "main": "app.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "public/bower_components"
+  ],
+  "scripts": {
+    "postinstall": "bower install",
+    "prestart": "npm install",
+    "start": "node app"
+  },
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.2",
+    "core-elements": "Polymer/core-elements#~0.5.2",
+    "paper-elements": "Polymer/paper-elements#~0.5.2"
+  }
+}
