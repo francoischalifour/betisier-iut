@@ -133,7 +133,6 @@ module.exports.Search = function(req, res) {
             }
 
             res.title = 'Résultat de la recherche';
-            res.search = search;
             res.listeResultat = result;
             res.nbResultat = result.length;
             res.render(path + 'searchResults', res);
