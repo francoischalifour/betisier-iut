@@ -28,6 +28,27 @@ module.exports.List = function(req, res) {
 }
 
 /**
+ * Lists all citations from the admin panel.
+ *
+ * @param {object} req
+ * @param {object} res
+ */
+module.exports.ListAdmin = function(req, res) {
+    res.title = 'Liste des citations';
+
+    Citation.getAllCitationAsAdmin(function(err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        res.listeCitation = result;
+        res.nbCitation = result.length;
+        res.render(path + 'list', res);
+    });
+}
+
+/**
  * Adds a new citation.
  *
  * @param {object} req
@@ -109,6 +130,33 @@ module.exports.Delete = function(req, res) {
     var cit_num = req.params.id;
 
     Citation.deleteCitation(cit_num, function(err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        res.redirect('/citations/all');
+    });
+}
+
+/**
+ * Validates a citation.
+ *
+ * @param {object} req
+ * @param {object} res
+ */
+module.exports.Validate = function(req, res) {
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
+
+    res.title = 'Valider une citation';
+
+    var cit_num = req.params.id;
+
+    Citation.validateCitation(cit_num, function(err, result) {
         if (err) {
             console.log(err);
             return;

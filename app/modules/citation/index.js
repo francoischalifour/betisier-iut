@@ -17,6 +17,7 @@ router.get('/all', CitationController.List);
 router.get('/create', CitationController.Create);
 router.post('/create', CitationController.Create);
 router.get('/:id/delete', CitationController.Delete);
+router.get('/:id/validate', CitationController.Validate);
 router.get('/search', CitationController.Search);
 router.post('/search', CitationController.Search);
 

@@ -121,7 +121,7 @@ module.exports.checkLogin = function(data, callback) {
             var password = sha256.digest('base64'); // Password with sha256
             var req;
 
-            req = 'SELECT per_num FROM personne WHERE per_login = ' + connection.escape(data.login) + ' AND per_pwd = ' + connection.escape(password);
+            req = 'SELECT per_num, per_admin FROM personne WHERE per_login = ' + connection.escape(data.login) + ' AND per_pwd = ' + connection.escape(password);
             connection.query(req, callback);
             connection.release();
         }

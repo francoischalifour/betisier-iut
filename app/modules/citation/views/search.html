@@ -7,7 +7,7 @@
                 <select name="per_num" id="per_num">
                     <option value="0">Sélectionnez une personne</option>
                     {{#each listePersonne}}
-                    <option value="{{per_num}}">{{per_nom}}</option>
+                    <option value="{{per_num}}">{{per_prenom}} {{per_nom}}</option>
                     {{/each}}
                 </select>
             </p>

@@ -11,6 +11,9 @@
         <th>Editer</th>
         <th>Supprimer</th>
         {{/if}}
+        {{#if ../session.isAdmin}}
+        <th>Valider</th>
+        {{/if}}
     </tr>
     {{#each listeCitation}}
     <tr>
@@ -27,6 +30,13 @@
         <td class="text-center">
             <a href="/citations/{{cit_num}}/delete">
                 <core-icon icon="delete"></core-icon>
+            </a>
+        </td>
+        {{/if}}
+        {{#if ../session.isAdmin}}
+        <td class="text-center">
+            <a href="/citations/{{cit_num}}/validate">
+                <core-icon icon="check"></core-icon>
             </a>
         </td>
         {{/if}}
