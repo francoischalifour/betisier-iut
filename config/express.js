@@ -17,6 +17,7 @@ var handlebars = require('express-handlebars');
 
 /**
  * Exports Express configuration.
+ *
  * @param  {object} app
  */
 module.exports = function(app) {
@@ -27,7 +28,14 @@ module.exports = function(app) {
         extended: true
     }));
 
+    /*
+     * Sets the port.
+     */
     app.set('port', 6800);
+
+    /*
+     * Defines the path to views.
+     */
     app.set('views', path.join(__dirname, '../app/modules'));
 
     app.use(cookieParser());
@@ -41,6 +49,7 @@ module.exports = function(app) {
 
     /**
      * Imports sessions to all pages.
+     *
      * @param  {object} req
      * @param  {object} res
      * @param  {object} next

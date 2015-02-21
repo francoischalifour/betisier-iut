@@ -53,13 +53,17 @@ module.exports.View = function(req, res) {
             res.title = 'Utilisateur inconnu';
         } else {
             res.user = result[0];
+
+            if (parseInt(per_num) === req.session.userid) {
+                res.actualUser = true;
+            }
+
             res.title = res.user.per_prenom + ' ' + res.user.per_nom;
         }
 
         res.render(path + 'show', res);
     });
 }
-
 
 /**
  * Adds a new person.

@@ -66,6 +66,28 @@ module.exports.getAllDate = function(callback) {
 }
 
 /**
+ * Gets best citation.
+ *
+ * @param  {function} callback
+ * @return the best citation
+ */
+module.exports.getBestCitation = function(callback) {
+    db.getConnection(function(err, connection) {
+        if (!err) {
+            var req;
+            req = 'SELECT cit_libelle, AVG(vot_valeur) as vot_valeur ';
+            req += 'FROM citation c ';
+            req += 'JOIN vote v ON v.cit_num = c.cit_num ';
+            req += 'WHERE cit_valide = 1 ';
+            req += 'ORDER BY vot_valeur DESC ';
+            req += 'LIMIT 1 ';
+            connection.query(req, callback);
+            connection.release();
+        }
+    });
+}
+
+/**
  * Gets all moyennes.
  *
  * @param  {function} callback
@@ -79,8 +101,8 @@ module.exports.getAllMoyenne = function(callback) {
             req += 'FROM citation c ';
             req += 'INNER JOIN vote v ON v.cit_num = c.cit_num ';
             req += 'WHERE cit_valide = 1 ';
-            req += 'GROUP BY c.cit_num '
-                //req += 'ORDER BY vot_valeur DESC '
+            req += 'GROUP BY c.cit_num ';
+            // req += 'ORDER BY vot_valeur DESC ';
             connection.query(req, callback);
             connection.release();
         }

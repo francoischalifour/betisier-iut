@@ -38,6 +38,7 @@
     </div>
 </div>
 
+{{#if actualUser}}
 <div layout horizontal center-justified>
     <paper-button>
         <core-icon icon="editor:mode-edit"></core-icon>
@@ -49,6 +50,7 @@
         Supprimer mon profil
     </paper-button>
 </div>
+{{/if}}
 {{else}}
 <p class="text-center">Cet utilisateur n'existe pas.</p>
 <p class="text-center">

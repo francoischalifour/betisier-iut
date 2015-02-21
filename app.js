@@ -7,6 +7,11 @@
  */
 var http = require('http');
 
+/**
+ * Imports Path module.
+ *
+ * @type {object}
+ */
 var path = require('path');
 
 /**
@@ -29,6 +34,9 @@ var app = express();
  */
 app.use(express.static(path.join(__dirname + '/public/')));
 
+/*
+ * Requires Express config.
+ */
 require('./config/express')(app);
 
 /*

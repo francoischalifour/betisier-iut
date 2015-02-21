@@ -1,6 +1,9 @@
 {{#if session.userid}}
 <p>Vous êtes maintenant connecté.</p>
 {{else}}
+{{#if error}}
+<paper-toast text="Vos identifiants sont incorrects." opened="true"></paper-toast>
+{{/if}}
 <div horizontal center-justified layout>
 
     <div class="card">

@@ -1,5 +1,6 @@
 'use strict';
 
+var Citation = require('../citation/citation.model');
 var path = './home/views/';
 
 /**

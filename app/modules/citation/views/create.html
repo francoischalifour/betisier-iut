@@ -10,7 +10,7 @@
                 <select name="per_num" id="per_num">
                     <option value="-1" disabled="disabled">Sélectionnez un salarié</option>
                     {{#each listeSalarie}}
-                    <option value="{{per_num}}">{{per_nom}}</option>
+                    <option value="{{per_num}}">{{per_prenom}} {{per_nom}}</option>
                     {{/each}}
                 </select>
             </p>

@@ -4,7 +4,7 @@ var Personne = require('../personne/personne.model');
 var path = './login/views/';
 
 /**
- * Logs in a user.
+ * Logs a user in.
  *
  * @param {object} req
  * @param {object} res
@@ -28,19 +28,31 @@ module.exports.Login = function(req, res) {
             }
 
             if (result.length === 1) {
+                // Set session information.
                 req.session.userid = result[0].per_num;
                 req.session.username = data.login;
+                req.session.isAdmin = result[0].per_admin;
+
+                res.session = req.session;
+
+                // Set cookies information.
+                /*res.cookie('login_token', +new Date(), {
+                    maxAge: 3600000,
+                    path: '/'
+                });*/
+            } else {
+                res.error = true;
             }
+
+            res.render(path + 'login', res);
         });
+    } else {
+        res.render(path + 'login', res);
     }
-
-    res.session = req.session;
-
-    res.render(path + 'login', res);
 }
 
 /**
- * Logs out a user.
+ * Logs a user out.
  *
  * @param {object} req
  * @param {object} res
@@ -54,9 +66,12 @@ module.exports.Logout = function(req, res) {
 
     res.title = 'Déconnexion';
 
+    // Destroy sessions.
     req.session.login = '';
-
     req.session.destroy();
+
+    // Destroy cookies
+    //res.clearCookie('login_token');
 
     res.redirect('/');
 }

@@ -58,7 +58,7 @@ module.exports.getPersonneById = function(per_num, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req;
-            req = 'SELECT per_prenom, per_nom, per_tel, per_mail, fon_libelle, vil_nom, dep_nom, sal_telprof ';
+            req = 'SELECT per_prenom, per_nom, per_tel, per_mail, per_admin, fon_libelle, vil_nom, dep_nom, sal_telprof ';
             req += 'FROM personne p ';
             req += 'LEFT JOIN etudiant e ON e.per_num = p.per_num ';
             req += 'LEFT JOIN departement d ON d.dep_num = e.dep_num ';
@@ -118,16 +118,10 @@ module.exports.checkLogin = function(data, callback) {
         if (!err) {
             var sha256 = crypto.createHash('sha256');
             sha256.update(data.password, 'utf8');
-            var password = sha256.digest('base64');
+            var password = sha256.digest('base64'); // Password with sha256
             var req;
 
-            console.log('Mot de passe en clair : ' + data.password);
-            console.log('Mot de passe crypté : ' + password);
-
             req = 'SELECT per_num FROM personne WHERE per_login = ' + connection.escape(data.login) + ' AND per_pwd = ' + connection.escape(password);
-
-            console.log(req);
-
             connection.query(req, callback);
             connection.release();
         }
