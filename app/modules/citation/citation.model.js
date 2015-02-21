@@ -32,7 +32,7 @@ module.exports.getAllCitation = function(callback) {
         if (!err) {
             // TODO : ajouter le cit_date_valide IS NOT NULL
             var req;
-            req = 'SELECT c.cit_num, cit_libelle, date_format(cit_date, "%d/%m/%Y") as cit_date, cit_date_valide, cit_valide, per_prenom, per_nom, p.per_num, AVG(vot_valeur) AS vot_valeur ';
+            req = 'SELECT c.cit_num, cit_libelle, DATE_FORMAT(cit_date, "%d/%m/%Y") as cit_date, cit_date_valide, cit_valide, per_prenom, per_nom, p.per_num, AVG(vot_valeur) AS vot_valeur ';
             req += 'FROM citation c ';
             req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
             req += 'LEFT JOIN vote v ON v.cit_num = c.cit_num ';
@@ -55,7 +55,7 @@ module.exports.getAllDate = function(callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req;
-            req = 'SELECT DISTINCT date_format(cit_date, "%d/%m/%Y") as cit_date ';
+            req = 'SELECT DISTINCT DATE_FORMAT(cit_date, "%d/%m/%Y") as cit_date ';
             req += 'FROM citation ';
             req += 'WHERE cit_valide = 1 ';
             req += 'ORDER BY cit_date DESC';
@@ -118,6 +118,9 @@ module.exports.getAllMoyenne = function(callback) {
 module.exports.addCitation = function(data, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
+            console.log(data);
+            data['cit_date'] = 'STR_TO_DATE("' + data.cit_date + '", "%Y-%m-%d")';
+            console.log(data.cit_date);
             connection.query('INSERT INTO citation SET ?', data, callback);
             connection.release();
         }
@@ -150,7 +153,7 @@ module.exports.deleteCitation = function(cit_num, callback) {
  * @param  {function} callback
  */
 module.exports.searchCitation = function(data, callback) {
-    // TODO : corriger problème de date
+    //TODO Problème recherche (champ vide)
     db.getConnection(function(err, connection) {
         var search = data.search;
         var per_num = data.per_num;
@@ -158,17 +161,19 @@ module.exports.searchCitation = function(data, callback) {
         var vot_valeur = data.vot_valeur;
 
         var req;
-        req = 'SELECT c.cit_num, cit_libelle, date_format(cit_date, "%d/%m/%Y") as cit_date, cit_date_valide, cit_valide, per_prenom, per_nom, p.per_num, AVG(vot_valeur) as vot_valeur ';
+        req = 'SELECT c.cit_num, cit_libelle, DATE_FORMAT(cit_date, "%d/%m/%Y") as cit_date, cit_date_valide, cit_valide, per_prenom, per_nom, p.per_num, AVG(vot_valeur) as vot_valeur ';
         req += 'FROM citation c ';
-        req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
-        req += 'INNER JOIN vote v ON v.cit_num = c.cit_num ';
+        if (per_num && per_num != 0)
+            req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
+        if (vot_valeur && vot_valeur != 0)
+            req += 'INNER JOIN vote v ON v.cit_num = c.cit_num ';
         req += 'WHERE cit_valide = 1 ';
         if (search)
             req += 'AND cit_libelle LIKE ' + connection.escape("%" + search + "%") + ' ';
         if (per_num && per_num != 0)
             req += 'AND p.per_num = ' + connection.escape(per_num) + ' ';
         if (cit_date && cit_date != 0)
-            req += 'AND cit_date = date_format(' + connection.escape(cit_date) + ', "%Y-%m-%d") ';
+            req += 'AND cit_date = STR_TO_DATE(' + connection.escape(cit_date) + , "%Y-%m-%d") ';
         if (vot_valeur && vot_valeur != 0)
             req += 'AND vot_valeur = ' + connection.escape(vot_valeur) + ' ';
         req += 'GROUP BY c.cit_num '
