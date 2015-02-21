@@ -40,6 +40,17 @@ module.exports = function(app) {
     }));
 
     /**
+     * Imports sessions to all pages.
+     * @param  {object} req
+     * @param  {object} res
+     * @param  {object} next
+     */
+    app.use(function(req, res, next) {
+        res.locals.session = req.session;
+        next();
+    });
+
+    /**
      * Loads all routes.
      *
      * @type {object}

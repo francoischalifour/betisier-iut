@@ -34,19 +34,19 @@ module.exports.List = function(req, res) {
  * @param {object} res
  */
 module.exports.Create = function(req, res) {
-    res.title = 'Ajouter une citation';
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
 
-    /*    if (!req.session.userid || !req.session.username) {
-            res.redirect('/');
-            return;
-        }*/
+    res.title = 'Ajouter une citation';
 
     if (req.method == 'POST') {
         var forbidden = false;
 
         var data = req.body;
-        //data['per_num_etu'] = req.session.userid;
-        data['per_num_etu'] = 3;
+        data['per_num_etu'] = req.session.userid;
 
         Mot.getAllMot(function(err, resultMot) {
             var citation = data['cit_libelle'].toLowerCase();
@@ -58,8 +58,6 @@ module.exports.Create = function(req, res) {
                     return;
                 }
             });
-
-            console.log(forbidden);
 
             if (!forbidden) {
                 Citation.addCitation(data, function(err, result) {
@@ -100,6 +98,12 @@ module.exports.Create = function(req, res) {
  * @param {object} res
  */
 module.exports.Delete = function(req, res) {
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
+
     res.title = 'Supprimer une citation';
 
     var cit_num = req.params.id;
@@ -121,6 +125,12 @@ module.exports.Delete = function(req, res) {
  * @param {object} res
  */
 module.exports.Search = function(req, res) {
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
+
     if (req.method == 'POST') {
         var data = req.body;
 

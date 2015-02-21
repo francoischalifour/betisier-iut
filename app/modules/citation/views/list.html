@@ -7,8 +7,10 @@
         <th>Citation</th>
         <th>Date</th>
         <th>Note</th>
+        {{#if ../session.userid}}
         <th>Editer</th>
         <th>Supprimer</th>
+        {{/if}}
     </tr>
     {{#each listeCitation}}
     <tr>
@@ -16,6 +18,7 @@
         <td>{{cit_libelle}}</td>
         <td>{{cit_date}}</td>
         <td>{{#if vot_valeur}}{{vot_valeur}}{{else}}-{{/if}}</td>
+        {{#if ../session.userid}}
         <td class="text-center">
             <a href="/citations/{{cit_num}}/edit">
                 <core-icon icon="editor:mode-edit"></core-icon>
@@ -26,6 +29,7 @@
                 <core-icon icon="delete"></core-icon>
             </a>
         </td>
+        {{/if}}
     </tr>
     {{/each}}
 </table>
