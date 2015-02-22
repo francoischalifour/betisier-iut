@@ -4,15 +4,15 @@
 <table>
     <tr>
         <th>Nom</th>
-        {{#if ../session.userid}}
-        <th width="100">Modifier</th>
-        <th width="100">Supprimer</th>
+        {{#if ../session.isAdmin}}
+        <th class="text-center" width="100">Modifier</th>
+        <th class="text-center" width="100">Supprimer</th>
         {{/if}}
     </tr>
     {{#each listeVille}}
     <tr>
         <td>{{vil_nom}}</td>
-        {{#if ../session.userid}}
+        {{#if ../session.isAdmin}}
         <td class="text-center">
             <a href="/villes/{{vil_num}}/edit">
                 <core-icon icon="editor:mode-edit"></core-icon>

@@ -17,9 +17,7 @@
         // Check if there is a forbidden word and replace it.
         listeMot.forEach(function(mot) {
             if ((citation.toLowerCase()).indexOf(mot.toLowerCase()) !== -1) {
-                var par = document.createElement('ul');
-                par.innerHTML = '<li class="list-unstyled"><core-icon icon="error"></core-icon> Le mot <em>' + mot + '</em> n\'est pas autorisé.</li>';
-                document.getElementById('error').appendChild(par);
+                document.getElementById('error').innerHTML = '<p><core-icon icon="error"></core-icon> Le mot <em>' + mot + '</em> n\'est pas autorisé.</p>';
 
                 // Replace forbidden words with asterisks.
                 var newCitation = (citation.toLowerCase()).replace(mot, function(s) {

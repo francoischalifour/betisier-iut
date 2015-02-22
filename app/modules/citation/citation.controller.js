@@ -15,35 +15,23 @@ var path = './citation/views/';
 module.exports.List = function(req, res) {
     res.title = 'Liste des citations';
 
-    Citation.getAllCitation(function(err, result) {
-        if (err) {
-            console.log(err);
-            return;
+    async.parallel([
+        function(callback) {
+            Citation.getAllCitation(function(err, resultCit) {
+                callback(null, resultCit);
+            });
+        },
+        function(callback) {
+            Citation.getAllCitationEnAttente(function(err, resultCitEnAtt) {
+                callback(null, resultCitEnAtt);
+            });
         }
+    ], function(err, result) {
+        res.listeCitation = result[0];
+        res.nbCitation = result[0].length;
+        res.listeCitationEnAttente = result[1];
+        res.nbCitationEnAttente = result[1].length;
 
-        res.listeCitation = result;
-        res.nbCitation = result.length;
-        res.render(path + 'list', res);
-    });
-}
-
-/**
- * Lists all citations from the admin panel.
- *
- * @param {object} req
- * @param {object} res
- */
-module.exports.ListAdmin = function(req, res) {
-    res.title = 'Liste des citations';
-
-    Citation.getAllCitationAsAdmin(function(err, result) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-
-        res.listeCitation = result;
-        res.nbCitation = result.length;
         res.render(path + 'list', res);
     });
 }
@@ -74,7 +62,6 @@ module.exports.Create = function(req, res) {
 
             resultMot.forEach(function(mot) {
                 if (citation.indexOf(mot.mot_interdit.toLowerCase()) !== -1) {
-                    console.log('Mot interdit : ' + mot.mot_interdit);
                     forbidden = true;
                     return;
                 }
@@ -107,6 +94,7 @@ module.exports.Create = function(req, res) {
         ], function(err, result) {
             res.listeSalarie = result[0];
             res.listeMot = result[1];
+
             res.render(path + 'create', res);
         });
     }

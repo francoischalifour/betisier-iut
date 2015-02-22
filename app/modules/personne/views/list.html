@@ -5,11 +5,27 @@
     <tr>
         <th>Prénom</th>
         <th>Nom</th>
+        {{#if session.isAdmin}}
+        <th class="text-center">Editer</th>
+        <th class="text-center">Supprimer</th>
+        {{/if}}
     </tr>
     {{#each listePersonne}}
     <tr>
         <td><a href="/people/{{per_num}}">{{per_prenom}}</a></td>
         <td><a href="/people/{{per_num}}">{{per_nom}}</a></td>
+        {{#if ../session.isAdmin}}
+        <td class="text-center">
+            <a href="/citations/{{cit_num}}/edit">
+                <core-icon icon="editor:mode-edit"></core-icon>
+            </a>
+        </td>
+        <td class="text-center">
+            <a href="/citations/{{cit_num}}/delete">
+                <core-icon icon="delete"></core-icon>
+            </a>
+        </td>
+        {{/if}}
     </tr>
     {{/each}}
 </table>

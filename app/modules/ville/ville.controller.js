@@ -72,7 +72,7 @@ module.exports.Edit = function(req, res) {
     var vil_num = req.params.id;
 
     if (req.method == 'POST') {
-        vil_nom = req.body.vil_nom;
+        var vil_nom = req.body.vil_nom;
 
         Ville.editVille(vil_num, vil_nom, function(err, result) {
             if (err) {

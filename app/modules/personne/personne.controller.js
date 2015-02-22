@@ -85,7 +85,11 @@ module.exports.Create = function(req, res) {
 
         console.log(data);
 
-        var typePers = 0;
+        console.log(data.pers_type);
+
+        return;
+
+        var typePers = data.per_type;
 
         Personne.addPersonne(data, typePers, function(err, result) {
             if (err) {
