@@ -1,5 +1,9 @@
 {{#if session.userid}}
-<p>Vous êtes maintenant connecté.</p>
+<p>Vous êtes maintenant connecté.<p>
+
+<p class="text-center">
+    <paper-button><a href="/">Retour à l'accueil</a></paper-button>
+</p>
 {{else}}
 {{#if error}}
 <paper-toast text="Vos identifiants sont incorrects." opened="true"></paper-toast>

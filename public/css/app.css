@@ -208,15 +208,6 @@ paper-action-dialog {
 }
 
 /* ---------------------------------------------------- *\
-        Core animated pages
-\* ---------------------------------------------------- */
-
-core-animated-pages {
-    width: 100%;
-    height: 100%;
-}
-
-/* ---------------------------------------------------- *\
         Containers
 \* ---------------------------------------------------- */
 
@@ -332,6 +323,26 @@ select {
     font: inherit;
     outline: none;
     background-color: transparent;
+}
+
+/* ---------------------------------------------------- *\
+        Quotes
+\* ---------------------------------------------------- */
+
+blockquote {
+    quotes: "\201C""\201D""\2018""\2019";
+    padding: 16px;
+    border-left: 6px solid #ccc;
+    background: #f9f9f9;
+}
+
+blockquote:before {
+    content: open-quote;
+    margin-right: .25em;
+    font-size: 4em;
+    line-height: 0.1em;
+    vertical-align: -0.4em;
+    color: #ccc;
 }
 
 /* ---------------------------------------------------- *\

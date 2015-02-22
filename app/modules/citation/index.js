@@ -20,6 +20,8 @@ router.get('/create/:id', CitationController.Create);
 router.post('/create/:id', CitationController.Create);
 router.get('/:id/delete', CitationController.Delete);
 router.get('/:id/validate', CitationController.Validate);
+router.get('/:id/vote', CitationController.Vote);
+router.post('/:id/vote', CitationController.Vote);
 router.get('/search', CitationController.Search);
 router.post('/search', CitationController.Search);
 

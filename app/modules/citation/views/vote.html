@@ -1,0 +1,37 @@
+{{#if dataVote}}
+<p>Votre vote a bien été pris en compte.</p>
+
+<p class="text-center">
+    <paper-button><a href="/citations/all">Retour à la liste des citations</a></paper-button>
+</p>
+{{else}}
+<div horizontal center-justified layout>
+
+    <div class="card">
+        <div class="card-header">Noter la citation de {{citation.per_prenom}} {{citation.per_nom}}</div>
+
+        <p>
+            <blockquote>{{citation.cit_libelle}}</blockquote>
+        </p>
+
+        <form action="#" method="post">
+
+            <select name="vot_valeur">
+                <option value="-1" disabled="disabled">Sélectionnez une note</option>
+                {{#each listeNote}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+
+            <div horizontal center-justified layout>
+                <button type="submit" is="paper-button-submit">
+                    <core-icon icon="check"></core-icon>
+                    Noter
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+{{/if}}

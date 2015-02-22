@@ -90,6 +90,26 @@ module.exports.getAllDate = function(callback) {
 }
 
 /**
+ * Gets citation by ID.
+ *
+ * @param  {function} callback
+ * @return the citation
+ */
+module.exports.getCitationById = function(cit_num, callback) {
+    db.getConnection(function(err, connection) {
+        if (!err) {
+            var req;
+            req = 'SELECT cit_libelle, c.per_num, per_nom, per_prenom ';
+            req += 'FROM citation c ';
+            req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
+            req += 'WHERE cit_num = ' + connection.escape(cit_num) + ' ';
+            connection.query(req, callback);
+            connection.release();
+        }
+    });
+}
+
+/**
  * Gets best citation.
  *
  * @param  {function} callback
@@ -222,5 +242,44 @@ module.exports.searchCitation = function(data, callback) {
 
         connection.query(req, callback);
         connection.release();
+    });
+}
+
+/**
+ * Notes a citation.
+ *
+ * @param {object}   data Citation data
+ * @param {function} callback
+ */
+module.exports.noteCitation = function(data, callback) {
+    db.getConnection(function(err, connection) {
+        if (!err) {
+            connection.query('INSERT INTO vote SET ?', data, callback);
+            connection.release();
+        }
+    });
+}
+
+/**
+ * Checks if the current user has already voted the citation.
+ *
+ * @param  {object}   cit_num
+ * @param  {object}   per_num
+ * @param  {function} callback [description]
+ * @return {boolean} true if has, false if has not
+ */
+module.exports.hasAlreadyVoted = function(cit_num, per_num, callback) {
+    db.getConnection(function(err, connection) {
+        if (!err) {
+            var req;
+            req = 'SELECT COUNT(*) AS hasAlready '
+            req += 'FROM vote ';
+            req += 'WHERE cit_num = ' + connection.escape(cit_num) + ' AND per_num = ' + connection.escape(per_num);
+
+            console.log(req);
+
+            connection.query(req, callback);
+            connection.release();
+        }
     });
 }

@@ -3,6 +3,7 @@
 var Citation = require('./citation.model');
 var Personne = require('../personne/personne.model');
 var Mot = require('../mot/mot.model');
+var Vote = require('../vote/vote.model');
 var async = require('async');
 var path = './citation/views/';
 
@@ -51,7 +52,7 @@ module.exports.Create = function(req, res) {
 
     res.title = 'Ajouter une citation';
 
-    if (req.method == 'POST') {
+    if (req.method === 'POST') {
         var forbidden = false;
 
         var data = req.body;
@@ -207,6 +208,67 @@ module.exports.Search = function(req, res) {
             res.listeDate = result[1];
             res.listeNote = result[2];
             res.render(path + 'search', res);
+        });
+    }
+}
+
+/**
+ * Notes a citation.
+ * @param {object} req
+ * @param {object} res
+ */
+module.exports.Vote = function(req, res) {
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
+
+    res.title = 'Noter une citation';
+
+    if (req.method === 'POST') {
+        var data = req.body;
+        data['cit_num'] = req.params.id;
+        data['per_num'] = req.session.userid;
+
+        Citation.noteCitation(data, function(err, result) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            res.dataVote = result;
+            res.render(path + 'vote', res);
+        });
+    } else {
+        var cit_num = req.params.id;
+
+        Citation.getCitationById(cit_num, function(err, result) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            var notes = [];
+
+            for (var i = 0; i <= 20; i++) {
+                notes.push(i);
+            }
+
+            Citation.hasAlreadyVoted(cit_num, req.session.userid, function(err, resultVoted) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                if (resultVoted[0].hasAlready === 0) {
+                    res.citation = result[0];
+                    res.listeNote = notes;
+                    res.canVote = true;
+
+                    res.render(path + 'vote', res);
+                }
+            });
         });
     }
 }
