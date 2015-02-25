@@ -63,7 +63,6 @@ core-header-panel {
 }
 
 core-toolbar {
-    overflow: hidden;
     color: #fff;
     background-color: #f44336;
 }

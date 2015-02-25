@@ -17,11 +17,13 @@ module.exports.List = function(req, res) {
     res.title = 'Liste des citations';
 
     async.parallel([
+        // Get all citations.
         function(callback) {
             Citation.getAllCitation(function(err, resultCit) {
                 callback(null, resultCit);
             });
         },
+        // Get all citations to be validated for the admin.
         function(callback) {
             Citation.getAllCitationEnAttente(function(err, resultCitEnAtt) {
                 callback(null, resultCitEnAtt);
@@ -52,6 +54,7 @@ module.exports.Create = function(req, res) {
 
     res.title = 'Ajouter une citation';
 
+    // Add the citation in the database.
     if (req.method === 'POST') {
         var forbidden = false;
 
@@ -61,6 +64,7 @@ module.exports.Create = function(req, res) {
         Mot.getAllMot(function(err, resultMot) {
             var citation = data['cit_libelle'].toLowerCase();
 
+            // Check if there is a forbidden word in the citation.
             resultMot.forEach(function(mot) {
                 if (citation.indexOf(mot.mot_interdit.toLowerCase()) !== -1) {
                     forbidden = true;
@@ -78,15 +82,20 @@ module.exports.Create = function(req, res) {
                     res.dataCitation = result;
                     res.render(path + 'createSuccess', res);
                 });
+            } else {
+                res.render(path + 'create', res);
             }
         });
     } else {
+        // Show the creation page.
         async.parallel([
+            // Get all persons to show in the list.
             function(callback) {
                 Personne.getAllPersonne(function(err, resultPer) {
                     callback(null, resultPer);
                 });
             },
+            // Get all forbidden words.
             function(callback) {
                 Mot.getAllMot(function(err, resultMot) {
                     callback(null, resultMot);
@@ -123,9 +132,9 @@ module.exports.Delete = function(req, res) {
             console.log(err);
             return;
         }
-
-        res.redirect('/citations/all');
     });
+
+    res.render(path + 'deleteSuccess', res);
 }
 
 /**
@@ -150,9 +159,9 @@ module.exports.Validate = function(req, res) {
             console.log(err);
             return;
         }
-
-        res.redirect('/citations/all');
     });
+
+    res.render(path + 'validateSuccess', res);
 }
 
 /**

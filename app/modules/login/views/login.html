@@ -1,11 +1,15 @@
 {{#if session.userid}}
-<p>Vous êtes maintenant connecté.<p>
-
-<p class="text-center">
-    <paper-button><a href="/">Retour à l'accueil</a></paper-button>
-</p>
-{{else}}
-{{#if error}}
+<div horizontal center-justified layout>
+    <div class="card">
+        <p class="text-center">Vous êtes maintenant connecté.</p>
+        <p class="text-center">
+            <paper-button>
+                <a href="/">Retour à l'accueil</a>
+            </paper-button>
+        </p>
+    </div>
+</div>
+{{else}} {{#if error}}
 <paper-toast text="Vos identifiants sont incorrects." opened="true"></paper-toast>
 {{/if}}
 <div horizontal center-justified layout>

@@ -52,10 +52,14 @@
 </div>
 {{/if}}
 {{else}}
-<p class="text-center">Cet utilisateur n'existe pas.</p>
-<p class="text-center">
-    <paper-button>
-        <a href="/people/all">Retour à la liste des utilisateurs</a>
-    </paper-button>
-</p>
+<div horizontal center-justified layout>
+    <div class="card">
+        <p class="text-center">Cet utilisateur n'existe pas.</p>
+        <p class="text-center">
+            <paper-button>
+                <a href="/people/all">Retour à la liste des utilisateurs</a>
+            </paper-button>
+        </p>
+    </div>
+</div>
 {{/if}}
