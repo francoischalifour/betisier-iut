@@ -46,10 +46,11 @@ module.exports.getAllSalarie = function(callback) {
 module.exports.getSalarieById = function(per_num, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
+            var req;
             req = 'SELECT per_num, sal_telprof, fon_num ';
             req += 'FROM salarie ';
-            req += 'WHERE per_num = ' + connection.escape(per_num) + ' ';
-            connection.query(req, callback);
+            req += 'WHERE per_num = ?';
+            connection.query(req, [per_num], callback);
             connection.release();
         }
     });

@@ -29,9 +29,8 @@ module.exports.getEtudiantById = function(per_num, callback) {
             var req;
             req = 'SELECT per_num, dep_num, div_num ';
             req += 'FROM etudiant ';
-            req += 'WHERE per_num = ' + connection.escape(per_num) + ' ';
-            req += 'ORDER BY per_num ASC';
-            connection.query(req, callback);
+            req += 'WHERE per_num = ?';
+            connection.query(req, [per_num], callback);
             connection.release();
         }
     });

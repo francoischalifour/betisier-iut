@@ -44,4 +44,4 @@ require('./config/express')(app);
  */
 http.createServer(app).listen(app.get('port'), function() {
     console.log('Listening on port ' + app.get('port') + '...');
-})
+});

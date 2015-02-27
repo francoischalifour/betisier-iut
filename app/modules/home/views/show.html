@@ -1,16 +1,26 @@
 <div horizontal center-justified layout>
 
-    <div class="card">
+    <div class="card ">
         <div class="card-header">Bienvenue sur le Bêtisier de l'IUT</div>
-        {{#if session.userid}}
-        <h4>Meilleure blague</h4>
-        <p>{{citation.cit_libelle}}</p>
-        {{else}}
-        <p>Venez découvrir les blagues les plus tordantes !</p>
-        <div horizontal center-justified layout>
-            <paper-button><a href="/login">Se connecter</a></paper-button>
-        </div>
-        {{/if}}
+
+        <h4>Dernière blague</h4>
+        <p>
+            <blockquote>{{lastCitation}}</blockquote>
+        </p>
     </div>
+
+    {{#unless session.userid}}
+    <div class="card">
+        <div class="card-header">Rejoignez la communauté</div>
+
+        <p>Venez découvrir les blagues les plus tordantes !</p>
+
+        <div horizontal center-justified layout>
+            <paper-button>
+                <a href="/login">Se connecter</a>
+            </paper-button>
+        </div>
+    </div>
+    {{/unless}}
 
 </div>

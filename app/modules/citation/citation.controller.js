@@ -28,12 +28,26 @@ module.exports.List = function(req, res) {
             Citation.getAllCitationEnAttente(function(err, resultCitEnAtt) {
                 callback(null, resultCitEnAtt);
             });
-        }
+        },
+        // Has the user already voted?
+        /*function(callback) {
+                    var cit_num = resultCit.cit_num;
+                    var per_num = req.session.userid;
+                    Citation.hasAlreadyVoted(cit_num, per_num, function(err, resultCitVot) {
+                        callback(null, resultCitVot);
+                    });
+                }*/
     ], function(err, result) {
         res.listeCitation = result[0];
         res.nbCitation = result[0].length;
         res.listeCitationEnAttente = result[1];
         res.nbCitationEnAttente = result[1].length;
+
+        /*if (result[2].hasAlready === 0) {
+            res.canVote = true;
+        }*/
+
+        console.log(res.canVote);
 
         res.render(path + 'list', res);
     });

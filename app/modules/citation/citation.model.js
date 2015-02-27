@@ -110,20 +110,19 @@ module.exports.getCitationById = function(cit_num, callback) {
 }
 
 /**
- * Gets best citation.
+ * Gets last citation.
  *
  * @param  {function} callback
- * @return the best citation
+ * @return the last citation
  */
-module.exports.getBestCitation = function(callback) {
+module.exports.getLastCitation = function(callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req;
-            req = 'SELECT cit_libelle, AVG(vot_valeur) as vot_valeur ';
+            req = 'SELECT cit_libelle ';
             req += 'FROM citation c ';
-            req += 'JOIN vote v ON v.cit_num = c.cit_num ';
             req += 'WHERE cit_valide = 1 ';
-            req += 'ORDER BY vot_valeur DESC ';
+            req += 'ORDER BY cit_date DESC ';
             req += 'LIMIT 1 ';
             connection.query(req, callback);
             connection.release();

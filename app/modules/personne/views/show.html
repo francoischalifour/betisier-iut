@@ -4,15 +4,19 @@
 
         <div class="card-header">{{user.per_prenom}} {{user.per_nom}}</div>
 
+        {{#if user.per_tel}}
         <p>
             <core-icon icon="communication:phone"></core-icon>
             {{user.per_tel}}
         </p>
+        {{/if}}
 
+        {{#if user.per_mail}}
         <p>
             <core-icon icon="mail"></core-icon>
             <a href="mailto:{{user.per_mail}}">{{user.per_mail}}</a>
         </p>
+        {{/if}}
 
         {{#if user.dep_nom}}
         <p>
@@ -38,7 +42,7 @@
     </div>
 </div>
 
-{{#if actualUser}}
+{{#if activeUser}}
 <div layout horizontal center-justified>
     <paper-button>
         <core-icon icon="editor:mode-edit"></core-icon>

@@ -45,8 +45,8 @@ module.exports.getVilleById = function(vil_num, callback) {
             var req;
             req = 'SELECT vil_num, vil_nom ';
             req += 'FROM ville ';
-            req += 'WHERE vil_num = ' + connection.escape(vil_num);
-            connection.query(req, callback);
+            req += 'WHERE vil_num = ?';
+            connection.query(req, [vil_num], callback);
             connection.release();
         }
     });
@@ -61,7 +61,7 @@ module.exports.getVilleById = function(vil_num, callback) {
 module.exports.addVille = function(vil_nom, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
-            connection.query('INSERT INTO ville SET vil_nom = ' + connection.escape(vil_nom), callback);
+            connection.query('INSERT INTO ville SET vil_nom = ?', [vil_nom], callback);
             connection.release();
         }
     });
@@ -79,9 +79,9 @@ module.exports.editVille = function(vil_num, vil_nom, callback) {
         if (!err) {
             var req;
             req = 'UPDATE ville ';
-            req += 'SET vil_nom = ' + connection.escape(vil_nom) + ' ';
-            req += 'WHERE vil_num = ' + connection.escape(vil_num);
-            connection.query(req, callback);
+            req += 'SET vil_nom = ? ';
+            req += 'WHERE vil_num = ?';
+            connection.query(req, [vil_nom, vil_num], callback);
             connection.release();
         }
     });
@@ -99,8 +99,8 @@ module.exports.deleteVille = function(vil_num, callback) {
         if (!err) {
             var req;
             req = 'DELETE FROM ville ';
-            req += 'WHERE vil_num = ' + connection.escape(vil_num);
-            connection.query(req, callback);
+            req += 'WHERE vil_num = ?';
+            connection.query(req, [vil_num], callback);
             connection.release();
         }
     });

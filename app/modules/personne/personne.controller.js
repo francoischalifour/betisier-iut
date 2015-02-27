@@ -54,8 +54,9 @@ module.exports.View = function(req, res) {
         } else {
             res.user = result[0];
 
+            // Check if the user profile matches with the current user.
             if (parseInt(per_num) === req.session.userid) {
-                res.actualUser = true;
+                res.activeUser = true;
             }
 
             res.title = res.user.per_prenom + ' ' + res.user.per_nom;
@@ -83,13 +84,20 @@ module.exports.Create = function(req, res) {
     if (req.method == 'POST') {
         var data = req.body;
 
-        console.log(data);
-
-        console.log(data.pers_type);
-
-        return;
-
+        // Type of person (0 for étudiant, 1 for salarié).
         var typePers = data.per_type;
+
+        // Remove inapropriate data.
+        if (parseInt(typePers) === 0) {
+            delete data.sal_telprof;
+            delete data.fon_num;
+        } else {
+            delete data.dep_num;
+            delete data.div_num;
+        }
+
+        // Remove the person type from the data object.
+        delete data.per_type;
 
         Personne.addPersonne(data, typePers, function(err, result) {
             if (err) {
@@ -97,8 +105,7 @@ module.exports.Create = function(req, res) {
                 return;
             }
 
-            res.dataPersonne = result;
-            res.render(path + 'list', res);
+            res.render(path + 'createSuccess', res);
         });
     } else {
         async.parallel([
@@ -121,7 +128,36 @@ module.exports.Create = function(req, res) {
             res.listeDepartement = result[0];
             res.listeDivision = result[1];
             res.listeFonction = result[2];
+
             res.render(path + 'create', res);
         });
     }
+}
+
+/**
+ * Deletes a person.
+ *
+ * @param {object} req
+ * @param {object} res
+ */
+module.exports.Delete = function(req, res) {
+    // TODO: vérifier s'il s'agit de l'utilisateur courant qui veut supprimer son profil, ou tout simplement de l'administrateur.
+    // If the user is not logged in.
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
+
+    res.title = 'Supprimer un utilisateur';
+
+    var per_num = req.params.id;
+
+    Personne.deletePersonne(per_num, function(err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+    });
+
+    res.render(path + 'delete', res);
 }

@@ -8,10 +8,7 @@
         <th>Citation</th>
         <th>Date</th>
         <th>Note</th>
-        {{#if ../session.userid}}
-        <th>Editer</th>
         <th>Supprimer</th>
-        {{/if}}
         <th>Valider</th>
     </tr>
     {{#each listeCitationEnAttente}}
@@ -20,11 +17,6 @@
         <td>{{cit_libelle}}</td>
         <td>{{cit_date}}</td>
         <td>{{#if vot_valeur}}{{vot_valeur}}{{else}}-{{/if}}</td>
-        <td class="text-center">
-            <a href="/citations/{{cit_num}}/edit">
-                <core-icon icon="editor:mode-edit"></core-icon>
-            </a>
-        </td>
         <td class="text-center">
             <a href="/citations/{{cit_num}}/delete">
                 <core-icon icon="delete"></core-icon>

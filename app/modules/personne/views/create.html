@@ -5,11 +5,11 @@
 
         <form action="#" method="post">
             <paper-input-decorator floatingLabel label="Prénom de la personne">
-                <input is="core-input" name="per_prenom">
+                <input is="core-input" name="per_prenom" required>
             </paper-input-decorator>
 
             <paper-input-decorator floatingLabel label="Nom de la personne">
-                <input is="core-input" name="per_nom">
+                <input is="core-input" name="per_nom" required>
             </paper-input-decorator>
 
             <paper-input-decorator floatingLabel label="Adresse e-mail de la personne">
@@ -20,30 +20,30 @@
                 <input is="core-input" type="tel" name="per_tel">
             </paper-input-decorator>
 
+            <paper-input-decorator label="input with 10 character max" error="maximum characters exceeded">
+                <input is="core-input" maxlength="10">
+                <paper-char-counter class="counter" target="i2"></paper-char-counter>
+            </paper-input-decorator>
+
             <paper-input-decorator floatingLabel label="Login de la personne">
-                <input is="core-input" name="per_login">
+                <input is="core-input" name="per_login" required>
             </paper-input-decorator>
 
             <paper-input-decorator floatingLabel label="Mot de passe de la personne">
-                <input is="core-input" type="password" name="per_pwd">
+                <input is="core-input" type="password" name="per_pwd" required>
             </paper-input-decorator>
-
-            <!-- <paper-radio-group selected="isEtudiant" id="type" horizontal center-justified layout onclick="togglePanel()">
-                <paper-radio-button name="isEtudiant" label="Etudiant"></paper-radio-button>
-                <paper-radio-button name="isSalarie" label="Salarié"></paper-radio-button>
-            </paper-radio-group> -->
 
             <div horizontal center-justified layout>
                 <label for="isEtudiant">Etudiant</label>
-                <input type="radio" name="pers_type" id="isEtudiant" value="0" checked="checked">
+                <input type="radio" name="per_type" id="isEtudiant" value="0" checked="checked">
                 <label for="isSalarie">Salarié</label>
-                <input type="radio" name="pers_type" id="isSalarie" value="1">
+                <input type="radio" name="per_type" id="isSalarie" value="1">
             </div>
 
             <div id="etudiantPanel">
                 <p>
                     <label for="dep_num">Département</label>
-                    <select name="dep_num" id="dep_num">
+                    <select name="dep_num" id="dep_num" required>
                         <option value="-1" disabled="disabled">Sélectionnez un département</option>
                         {{#each listeDepartement}}
                         <option value="{{dep_num}}">{{dep_nom}}</option>
@@ -53,7 +53,7 @@
 
                 <p>
                     <label for="div_num">Division</label>
-                    <select name="div_num" id="div_num">
+                    <select name="div_num" id="div_num" required>
                         <option value="-1" disabled="disabled">Sélectionnez une division</option>
                         {{#each listeDivision}}
                         <option value="{{div_num}}">{{div_nom}}</option>
@@ -64,7 +64,7 @@
 
             <div id="salariePanel">
                 <paper-input-decorator floatingLabel label="Téléphone professionnel" flex>
-                    <input is="core-input" type="tel" name="telPro" id="telPro">
+                    <input is="core-input" type="tel" name="sal_telprof" id="sal_telprof">
                 </paper-input-decorator>
 
                 <p>
@@ -91,6 +91,8 @@
 
 <script>
 (function() {
+    'use strict';
+
     var etudiantPanel = document.getElementById('etudiantPanel');
     var salariePanel = document.getElementById('salariePanel');
     var etudiantButton = document.getElementById('isEtudiant');
@@ -106,29 +108,30 @@
      */
     function togglePanel() {
         if (etudiantButton.checked) {
+            // Add / remove required property.
+            document.getElementById('sal_telprof').setAttribute('required', 'false');
+            document.getElementById('fon_num').setAttribute('required', 'false');
+            document.getElementById('dep_num').setAttribute('required', 'required');
+            document.getElementById('div_num').setAttribute('required', 'required');
+
+            // Show / hide panel
             salariePanel.style.display = 'none';
             etudiantPanel.style.display = 'block';
+
+            console.log(document.getElementById('sal_telprof'));
         } else {
+            // Add / remove required property.
+            document.getElementById('dep_num').setAttribute('required', 'false');
+            document.getElementById('div_num').setAttribute('required', 'false');
+            document.getElementById('sal_telprof').setAttribute('required', 'required');
+            document.getElementById('fon_num').setAttribute('required', 'required');
+
+            // Show / hide panel
             salariePanel.style.display = 'block';
             etudiantPanel.style.display = 'none';
+
+            console.log(document.getElementById('sal_telprof'));
         }
     }
 })();
-</script>
-
-<script>
-/*    var etudiantPanel = document.getElementById('etudiantPanel');
-    var salariePanel = document.getElementById('salariePanel');
-
-    salariePanel.style.display = 'none';
-
-    function togglePanel() {
-        if (salariePanel.style.display == 'none') {
-            salariePanel.style.display = 'block';
-            etudiantPanel.style.display = 'none';
-        } else {
-            salariePanel.style.display = 'none';
-            etudiantPanel.style.display = 'block';
-        }
-    }*/
 </script>

@@ -65,8 +65,8 @@ module.exports.getPersonneById = function(per_num, callback) {
             req += 'LEFT JOIN ville v ON v.vil_num = d.vil_num ';
             req += 'LEFT JOIN salarie s ON s.per_num = p.per_num ';
             req += 'LEFT JOIN fonction f ON f.fon_num = s.fon_num ';
-            req += 'WHERE p.per_num = ' + connection.escape(per_num);
-            connection.query(req, callback);
+            req += 'WHERE p.per_num = ?';
+            connection.query(req, [per_num], callback);
             connection.release();
         }
     });
@@ -81,26 +81,66 @@ module.exports.getPersonneById = function(per_num, callback) {
 module.exports.addPersonne = function(data, typePers, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
-            var req;
+            var sha256 = crypto.createHash('sha256');
+            sha256.update(data.per_pwd, 'utf8');
+            var password = sha256.digest('base64'); // Crypted password
 
-            req = 'INSERT INTO personne ';
-            req += '(per_nom, per_prenom, per_tel, per_mail, per_login, per_pwd) ';
-            req += 'VALUES (' + data['per_nom'] + ', ' + data['per_prenom'] + ', ' + data['per_tel'] + ', ' + data['per_mail'] + ', ' + data['per_login'] + ', ' + data['per_pwd'] + ')';
+            var personne = {
+                per_nom: data.per_nom,
+                per_prenom: data.per_prenom,
+                per_tel: data.per_tel,
+                per_mail: data.per_mail,
+                per_login: data.per_login,
+                per_pwd: password
+            };
 
-            connection.query(req, data, callback);
+            // Add the person.
+            connection.query('INSERT INTO personne SET ?', personne, function(err, result) {
+                var lastId = result.insertId;
 
-            if (typePers === 0) {
-                req = 'INSERT INTO etudiant ';
-                req += '(per_num, dep_num, div_num) ';
-                req += 'VALUES (' + data['per_num'] + ', ' + data['dep_num'] + ', ' + data['div_num'] + ')';
+                // Add the étudiant or the salarié (0 for étudiant, 1 for salarié).
+                if (parseInt(typePers) === 0) {
+                    var etudiant = {
+                        per_num: lastId,
+                        dep_num: data.dep_num,
+                        div_num: data.div_num
+                    };
+
+                    connection.query('INSERT INTO etudiant SET ?', etudiant, callback);
+                } else {
+                    var salarie = {
+                        per_num: lastId,
+                        sal_telprof: data.sal_telprof,
+                        fon_num: data.fon_num
+                    };
+
+                    connection.query('INSERT INTO salarie SET ?', salarie, callback);
+                }
+            });
+
+            connection.release();
+        }
+    });
+}
+
+/**
+ * Deletes a person.
+ *
+ * @param  {number}   per_num  Id of the person to delete
+ * @param  {function} callback
+ */
+module.exports.deletePersonne = function(per_num, callback) {
+    db.getConnection(function(err, connection) {
+        if (!err) {
+            var isEtudiant = connection.query('SELECT COUNT(*) as resEtu FROM etudiant WHERE per_num = ?', [per_num], callback);
+
+            if (isEtudiant) {
+                connection.query('DELETE FROM etudiant WHERE per_num = ?', [per_num], callback);
             } else {
-                req = 'INSERT INTO salarie ';
-                req += '(per_num, dep_num, div_num) ';
-                req += 'VALUES (' + data['per_num'] + ', ' + data['sal_telprof'] + ', ' + data['fon_num'] + ')';
+                connection.query('DELETE FROM salarie WHERE per_num = ?', [per_num], callback);
             }
 
-            connection.query(req, data, callback);
-
+            connection.query('DELETE FROM personne WHERE per_num = ?', [per_num], callback);
             connection.release();
         }
     });
@@ -118,11 +158,13 @@ module.exports.checkLogin = function(data, callback) {
         if (!err) {
             var sha256 = crypto.createHash('sha256');
             sha256.update(data.password, 'utf8');
-            var password = sha256.digest('base64'); // Password with sha256
+            var password = sha256.digest('base64'); // Crypted password
             var req;
 
-            req = 'SELECT per_num, per_admin FROM personne WHERE per_login = ' + connection.escape(data.login) + ' AND per_pwd = ' + connection.escape(password);
-            connection.query(req, callback);
+            req = 'SELECT per_num, per_admin ';
+            req += 'FROM personne ';
+            req += 'WHERE per_login = ? AND per_pwd = ?';
+            connection.query(req, [data.login, password], callback);
             connection.release();
         }
     });

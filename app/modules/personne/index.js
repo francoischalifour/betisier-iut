@@ -17,6 +17,7 @@ router.get('/all', PersonneController.List);
 router.get('/create', PersonneController.Create);
 router.post('/create', PersonneController.Create);
 router.get('/:id', PersonneController.View);
+router.get('/:id/delete', PersonneController.Delete);
 
 /**
  * Exports configured router.
