@@ -58,7 +58,7 @@ module.exports.getPersonneById = function(per_num, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req;
-            req = 'SELECT per_prenom, per_nom, per_tel, per_mail, per_admin, fon_libelle, vil_nom, dep_nom, sal_telprof ';
+            req = 'SELECT p.per_num, per_prenom, per_nom, per_tel, per_mail, per_admin, fon_libelle, vil_nom, dep_nom, sal_telprof ';
             req += 'FROM personne p ';
             req += 'LEFT JOIN etudiant e ON e.per_num = p.per_num ';
             req += 'LEFT JOIN departement d ON d.dep_num = e.dep_num ';
@@ -96,25 +96,27 @@ module.exports.addPersonne = function(data, typePers, callback) {
 
             // Add the person.
             connection.query('INSERT INTO personne SET ?', personne, function(err, result) {
-                var lastId = result.insertId;
+                if (!err) {
+                    var lastId = result.insertId;
 
-                // Add the étudiant or the salarié (0 for étudiant, 1 for salarié).
-                if (parseInt(typePers) === 0) {
-                    var etudiant = {
-                        per_num: lastId,
-                        dep_num: data.dep_num,
-                        div_num: data.div_num
-                    };
+                    // Add the étudiant or the salarié (0 for étudiant, 1 for salarié).
+                    if (parseInt(typePers) === 0) {
+                        var etudiant = {
+                            per_num: lastId,
+                            dep_num: data.dep_num,
+                            div_num: data.div_num
+                        };
 
-                    connection.query('INSERT INTO etudiant SET ?', etudiant, callback);
-                } else {
-                    var salarie = {
-                        per_num: lastId,
-                        sal_telprof: data.sal_telprof,
-                        fon_num: data.fon_num
-                    };
+                        connection.query('INSERT INTO etudiant SET ?', etudiant, callback);
+                    } else {
+                        var salarie = {
+                            per_num: lastId,
+                            sal_telprof: data.sal_telprof,
+                            fon_num: data.fon_num
+                        };
 
-                    connection.query('INSERT INTO salarie SET ?', salarie, callback);
+                        connection.query('INSERT INTO salarie SET ?', salarie, callback);
+                    }
                 }
             });
 

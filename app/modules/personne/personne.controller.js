@@ -55,8 +55,8 @@ module.exports.View = function(req, res) {
             res.user = result[0];
 
             // Check if the user profile matches with the current user.
-            if (parseInt(per_num) === req.session.userid) {
-                res.activeUser = true;
+            if (parseInt(per_num) === req.session.userid || req.session.isAdmin) {
+                res.canUpdate = true;
             }
 
             res.title = res.user.per_prenom + ' ' + res.user.per_nom;
@@ -141,7 +141,6 @@ module.exports.Create = function(req, res) {
  * @param {object} res
  */
 module.exports.Delete = function(req, res) {
-    // TODO: vérifier s'il s'agit de l'utilisateur courant qui veut supprimer son profil, ou tout simplement de l'administrateur.
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -158,6 +157,12 @@ module.exports.Delete = function(req, res) {
             return;
         }
     });
+
+    // If this is the active user, log him out.
+    if (parseInt(per_num) === req.session.userid) {
+        res.redirect('/logout');
+        return;
+    }
 
     res.render(path + 'delete', res);
 }

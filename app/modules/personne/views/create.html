@@ -16,13 +16,9 @@
                 <input is="core-input" type="email" name="per_mail">
             </paper-input-decorator>
 
-            <paper-input-decorator floatingLabel label="Téléphone de la personne">
-                <input is="core-input" type="tel" name="per_tel">
-            </paper-input-decorator>
-
-            <paper-input-decorator label="input with 10 character max" error="maximum characters exceeded">
-                <input is="core-input" maxlength="10">
-                <paper-char-counter class="counter" target="i2"></paper-char-counter>
+            <paper-input-decorator floatingLabel label="Téléphone de la personne" error="Nombre maximal de caractères atteint">
+                <input is="core-input" type="tel" name="per_tel" id="per_tel" maxlength="10">
+                <paper-char-counter class="counter" target="per_tel"></paper-char-counter>
             </paper-input-decorator>
 
             <paper-input-decorator floatingLabel label="Login de la personne">

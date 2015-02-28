@@ -9,16 +9,12 @@
             <core-icon icon="communication:phone"></core-icon>
             {{user.per_tel}}
         </p>
-        {{/if}}
-
-        {{#if user.per_mail}}
+        {{/if}} {{#if user.per_mail}}
         <p>
             <core-icon icon="mail"></core-icon>
             <a href="mailto:{{user.per_mail}}">{{user.per_mail}}</a>
         </p>
-        {{/if}}
-
-        {{#if user.dep_nom}}
+        {{/if}} {{#if user.dep_nom}}
         <p>
             <core-icon icon="social:domain"></core-icon>
             {{user.dep_nom}}
@@ -42,20 +38,23 @@
     </div>
 </div>
 
-{{#if activeUser}}
+{{#if canUpdate}}
 <div layout horizontal center-justified>
     <paper-button>
-        <core-icon icon="editor:mode-edit"></core-icon>
-        Modifier mon profil
+        <a href="/people/{{user.per_num}}/edit">
+            <core-icon icon="editor:mode-edit"></core-icon>
+            Modifier mon profil
+        </a>
     </paper-button>
 
     <paper-button>
-        <core-icon icon="delete"></core-icon>
-        Supprimer mon profil
+        <a href="/people/{{user.per_num}}/delete">
+            <core-icon icon="delete"></core-icon>
+            Supprimer mon profil
+        </a>
     </paper-button>
 </div>
-{{/if}}
-{{else}}
+{{/if}} {{else}}
 <div horizontal center-justified layout>
     <div class="card">
         <p class="text-center">Cet utilisateur n'existe pas.</p>
