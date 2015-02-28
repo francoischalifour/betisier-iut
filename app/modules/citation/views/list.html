@@ -7,7 +7,6 @@
         <th>Auteur</th>
         <th>Citation</th>
         <th>Date</th>
-        <th>Note</th>
         <th>Supprimer</th>
         <th>Valider</th>
     </tr>
@@ -16,7 +15,6 @@
         <td><a href="/people/{{per_num}}">{{per_prenom}} {{per_nom}}</a></td>
         <td>{{cit_libelle}}</td>
         <td>{{cit_date}}</td>
-        <td>{{#if vot_valeur}}{{vot_valeur}}{{else}}-{{/if}}</td>
         <td class="text-center">
             <a href="/citations/{{cit_num}}/delete">
                 <core-icon icon="delete"></core-icon>
@@ -45,6 +43,9 @@
         {{#if ../session.userid}}
         <th class="text-center">Noter</th>
         {{/if}}
+        {{#if ../session.isAdmin}}
+        <th>Supprimer</th>
+        {{/if}}
     </tr>
     {{#each listeCitation}}
     <tr>
@@ -54,13 +55,16 @@
         <td>{{#if vot_valeur}}{{vot_valeur}}{{else}}-{{/if}}</td>
         {{#if ../session.userid}}
         <td class="text-center">
-            {{#if ../canVote}}
             <a href="/citations/{{cit_num}}/vote">
                 <core-icon icon="editor:mode-edit"></core-icon>
             </a>
-            {{else}}
-            -
-            {{/if}}
+        </td>
+        {{/if}}
+        {{#if ../session.userid}}
+        <td class="text-center">
+            <a href="/citations/{{cit_num}}/delete">
+                <core-icon icon="delete"></core-icon>
+            </a>
         </td>
         {{/if}}
     </tr>

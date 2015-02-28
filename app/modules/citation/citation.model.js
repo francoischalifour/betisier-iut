@@ -30,19 +30,19 @@ var db = require('../../../dbConfig');
 module.exports.getAllCitation = function(callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
-            // TODO : ajouter le cit_date_valide IS NOT NULL
             var req;
-            req = 'SELECT c.cit_num, cit_libelle, DATE_FORMAT(cit_date, "%d/%m/%Y") as cit_date, cit_date_valide, cit_valide, per_prenom, per_nom, p.per_num, AVG(vot_valeur) AS vot_valeur ';
+            req = 'SELECT c.cit_num, cit_libelle, DATE_FORMAT(cit_date, "%d/%m/%Y") as cit_date, per_prenom, per_nom, p.per_num, AVG(vot_valeur) AS vot_valeur ';
             req += 'FROM citation c ';
             req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
             req += 'LEFT JOIN vote v ON v.cit_num = c.cit_num ';
-            req += 'WHERE cit_valide = 1 ';
+            req += 'WHERE cit_valide = 1 AND cit_date_valide IS NOT NULL ';
             req += 'GROUP BY c.cit_num '
-            req += 'ORDER BY cit_date ASC '
+            req += 'ORDER BY cit_date_valide DESC'
+
             connection.query(req, callback);
             connection.release();
         }
-    })
+    });
 }
 
 /**
@@ -54,19 +54,19 @@ module.exports.getAllCitation = function(callback) {
 module.exports.getAllCitationEnAttente = function(callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
-            // TODO : ajouter le cit_date_valide IS NOT NULL
             var req;
             req = 'SELECT c.cit_num, cit_libelle, DATE_FORMAT(cit_date, "%d/%m/%Y") as cit_date, cit_date_valide, cit_valide, per_prenom, per_nom, p.per_num, AVG(vot_valeur) AS vot_valeur ';
             req += 'FROM citation c ';
             req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
             req += 'LEFT JOIN vote v ON v.cit_num = c.cit_num ';
-            req += 'WHERE cit_valide = 0 ';
+            req += 'WHERE cit_valide = 0 OR cit_date_valide IS NULL ';
             req += 'GROUP BY c.cit_num '
-            req += 'ORDER BY cit_date ASC '
+            req += 'ORDER BY cit_date ASC'
+
             connection.query(req, callback);
             connection.release();
         }
-    })
+    });
 }
 
 /**
@@ -83,6 +83,7 @@ module.exports.getAllDate = function(callback) {
             req += 'FROM citation ';
             req += 'WHERE cit_valide = 1 ';
             req += 'ORDER BY cit_date DESC';
+
             connection.query(req, callback);
             connection.release();
         }
@@ -102,8 +103,9 @@ module.exports.getCitationById = function(cit_num, callback) {
             req = 'SELECT cit_libelle, c.per_num, per_nom, per_prenom ';
             req += 'FROM citation c ';
             req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
-            req += 'WHERE cit_num = ' + connection.escape(cit_num) + ' ';
-            connection.query(req, callback);
+            req += 'WHERE cit_num = ? ';
+
+            connection.query(req, [cit_num], callback);
             connection.release();
         }
     });
@@ -123,7 +125,8 @@ module.exports.getLastCitation = function(callback) {
             req += 'FROM citation c ';
             req += 'WHERE cit_valide = 1 ';
             req += 'ORDER BY cit_date DESC ';
-            req += 'LIMIT 1 ';
+            req += 'LIMIT 1';
+
             connection.query(req, callback);
             connection.release();
         }
@@ -140,16 +143,17 @@ module.exports.getAllMoyenne = function(callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req;
-            req = 'SELECT AVG(vot_valeur) as vot_valeur ';
+            req = 'SELECT AVG(vot_valeur) AS vot_valeur ';
             req += 'FROM citation c ';
             req += 'INNER JOIN vote v ON v.cit_num = c.cit_num ';
             req += 'WHERE cit_valide = 1 ';
             req += 'GROUP BY c.cit_num ';
-            // req += 'ORDER BY vot_valeur DESC ';
+            req += 'ORDER BY vot_valeur ASC'
+
             connection.query(req, callback);
             connection.release();
         }
-    })
+    });
 }
 
 /**
@@ -161,7 +165,6 @@ module.exports.getAllMoyenne = function(callback) {
 module.exports.addCitation = function(data, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
-            data['cit_date'] = 'STR_TO_DATE("' + data.cit_date + '", "%Y-%m-%d")';
             connection.query('INSERT INTO citation SET ?', data, callback);
             connection.release();
         }
@@ -178,10 +181,11 @@ module.exports.deleteCitation = function(cit_num, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req, req2;
-            req = 'DELETE FROM vote WHERE cit_num = ' + connection.escape(cit_num);
-            req2 = 'DELETE FROM citation WHERE cit_num = ' + connection.escape(cit_num);
-            connection.query(req, callback);
-            connection.query(req2, callback);
+            req = 'DELETE FROM vote WHERE cit_num = ?';
+            req2 = 'DELETE FROM citation WHERE cit_num = ?';
+
+            connection.query(req, [cit_num], callback);
+            connection.query(req2, [cit_num], callback);
             connection.release();
         }
     });
@@ -193,14 +197,16 @@ module.exports.deleteCitation = function(cit_num, callback) {
  * @param {object}   data Citation data
  * @param {function} callback
  */
-module.exports.validateCitation = function(cit_num, callback) {
+module.exports.validateCitation = function(per_num, cit_num, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req;
+            var date = new Date();
             req = 'UPDATE citation ';
-            req += 'SET cit_valide = 1, cit_date_valide = STR_TO_DATE("' + new Date() + '", "%Y-%m-%d") ';
-            req += 'WHERE cit_num = ' + connection.escape(cit_num);
-            connection.query(req, callback);
+            req += 'SET per_num_valide = ?, cit_valide = 1, cit_date_valide = ? ';
+            req += 'WHERE cit_num = ?';
+
+            connection.query(req, [per_num, date, cit_num], callback);
             connection.release();
         }
     });
@@ -213,31 +219,31 @@ module.exports.validateCitation = function(cit_num, callback) {
  * @param  {function} callback
  */
 module.exports.searchCitation = function(data, callback) {
-    //TODO Problème recherche (champ vide)
     db.getConnection(function(err, connection) {
-        var search = data.search;
-        var per_num = data.per_num;
-        var cit_date = data.cit_date;
-        var vot_valeur = data.vot_valeur;
-
         var req;
         req = 'SELECT c.cit_num, cit_libelle, DATE_FORMAT(cit_date, "%d/%m/%Y") as cit_date, cit_date_valide, cit_valide, per_prenom, per_nom, p.per_num, AVG(vot_valeur) as vot_valeur ';
         req += 'FROM citation c ';
         req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
         req += 'INNER JOIN vote v ON v.cit_num = c.cit_num ';
         req += 'WHERE cit_valide = 1 ';
-        if (search)
-            req += 'AND cit_libelle LIKE ' + connection.escape("%" + search + "%") + ' ';
-        if (per_num && per_num != 0)
-            req += 'AND p.per_num = ' + connection.escape(per_num) + ' ';
-        if (cit_date && cit_date != 0)
-            req += 'AND cit_date = STR_TO_DATE(' + connection.escape(cit_date) + ', "%Y-%m-%d") ';
-        if (vot_valeur && vot_valeur != 0)
-            req += 'AND vot_valeur = ' + connection.escape(vot_valeur) + ' ';
-        req += 'GROUP BY c.cit_num '
-        req += 'ORDER BY cit_date DESC ';
 
-        console.log(req);
+        if (data.search)
+            req += 'AND cit_libelle LIKE ' + connection.escape('%' + data.search + '%') + ' ';
+
+        if (data.per_num && data.per_num != 0)
+            req += 'AND p.per_num = ' + data.per_num + ' ';
+
+        if (data.cit_date && data.cit_date != 0) {
+            var cit_date = data.cit_date.split('/');
+            var cit_date = connection.escape(cit_date[2] + '-' + cit_date[1] + '-' + cit_date[0]);
+            req += 'AND cit_date = ' + cit_date + ' ';
+        }
+
+        if (data.vot_valeur && data.vot_valeur != 0)
+            req += 'AND vot_valeur = ' + connection.escape(data.vot_valeur) + ' ';
+
+        req += 'GROUP BY c.cit_num '
+        req += 'ORDER BY cit_date DESC';
 
         connection.query(req, callback);
         connection.release();
@@ -270,14 +276,7 @@ module.exports.noteCitation = function(data, callback) {
 module.exports.hasAlreadyVoted = function(cit_num, per_num, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
-            var req;
-            req = 'SELECT COUNT(*) AS hasAlready '
-            req += 'FROM vote ';
-            req += 'WHERE cit_num = ' + connection.escape(cit_num) + ' AND per_num = ' + connection.escape(per_num);
-
-            console.log(req);
-
-            connection.query(req, callback);
+            connection.query('SELECT COUNT(*) AS hasAlready FROM vote WHERE cit_num = ? AND per_num = ?', [cit_num, per_num], callback);
             connection.release();
         }
     });

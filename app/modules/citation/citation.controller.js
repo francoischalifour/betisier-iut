@@ -38,6 +38,7 @@ module.exports.List = function(req, res) {
                     });
                 }*/
     ], function(err, result) {
+        // TODO: transformer la note (numeric) en string pour que le 0 soit pris en compte par Handlebars.
         res.listeCitation = result[0];
         res.nbCitation = result[0].length;
         res.listeCitationEnAttente = result[1];
@@ -46,8 +47,6 @@ module.exports.List = function(req, res) {
         /*if (result[2].hasAlready === 0) {
             res.canVote = true;
         }*/
-
-        console.log(res.canVote);
 
         res.render(path + 'list', res);
     });
@@ -167,8 +166,9 @@ module.exports.Validate = function(req, res) {
     res.title = 'Valider une citation';
 
     var cit_num = req.params.id;
+    var per_num = req.session.userid;
 
-    Citation.validateCitation(cit_num, function(err, result) {
+    Citation.validateCitation(per_num, cit_num, function(err, result) {
         if (err) {
             console.log(err);
             return;

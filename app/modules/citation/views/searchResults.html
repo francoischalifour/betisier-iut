@@ -7,29 +7,49 @@
         <th>Citation</th>
         <th>Date</th>
         <th>Note</th>
-        <th>Action</th>
+        {{#if ../session.userid}}
+        <th class="text-center">Noter</th>
+        {{/if}}
+        {{#if ../session.isAdmin}}
+        <th>Supprimer</th>
+        {{/if}}
     </tr>
     {{#each listeResultat}}
     <tr>
         <td>{{per_prenom}} {{per_nom}}</td>
         <td>{{cit_libelle}}</td>
         <td>{{cit_date}}</td>
-        <td>{{vot_valeur}}</td>
-        <td>
-            <a href="citations/{{cit_num}}/edit">
+        <td>{{#if vot_valeur}}{{vot_valeur}}{{else}}-{{/if}}</td>
+        {{#if ../session.userid}}
+        <td class="text-center">
+            <a href="/citations/{{cit_num}}/vote">
                 <core-icon icon="editor:mode-edit"></core-icon>
             </a>
-            <a href="citations/{{cit_num}}/delete">
+        </td>
+        {{/if}}
+        {{#if ../session.userid}}
+        <td class="text-center">
+            <a href="/citations/{{cit_num}}/delete">
                 <core-icon icon="delete"></core-icon>
             </a>
         </td>
+        {{/if}}
     </tr>
     {{/each}}
 </table>
-{{else}}
-<p class="text-center">Il n'y a aucun résultat pour cette recherche.</p>
-{{/if}}
 
 <p class="text-center">
     <paper-button><a href="/citations/search">Faire une nouvelle recherche</a></paper-button>
 </p>
+{{else}}
+<div horizontal center-justified layout>
+    <div class="card">
+        <p class="text-center">Il n'y a aucun résultat pour cette recherche.</p>
+        <p class="text-center">
+            <paper-button>
+                <a href="/citations/search">Faire une nouvelle recherche</a>
+            </paper-button>
+        </p>
+    </div>
+</div>
+{{/if}}
