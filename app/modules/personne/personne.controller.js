@@ -141,9 +141,16 @@ module.exports.Create = function(req, res) {
  * @param {object} res
  */
 module.exports.Delete = function(req, res) {
+    // TODO : Rediriger vers la page deleteUnknown si la personne n'existe pas.
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
+        return;
+    }
+
+    // If the active user is not allowed.
+    if (!req.session.isAdmin && parseInt(per_num) !== req.session.userid) {
+        res.redirect('/people/all');
         return;
     }
 
@@ -156,13 +163,13 @@ module.exports.Delete = function(req, res) {
             console.log(err);
             return;
         }
+
+        // If this is the active user, log him out.
+        if (parseInt(per_num) === req.session.userid) {
+            res.redirect('/logout');
+            return;
+        } else {
+            res.render(path + 'delete', res);
+        }
     });
-
-    // If this is the active user, log him out.
-    if (parseInt(per_num) === req.session.userid) {
-        res.redirect('/logout');
-        return;
-    }
-
-    res.render(path + 'delete', res);
 }

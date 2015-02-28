@@ -219,6 +219,7 @@ module.exports.validateCitation = function(per_num, cit_num, callback) {
  * @param  {function} callback
  */
 module.exports.searchCitation = function(data, callback) {
+    // TODO : faire la recherche à plus ou moins un point
     db.getConnection(function(err, connection) {
         var req;
         req = 'SELECT c.cit_num, cit_libelle, DATE_FORMAT(cit_date, "%d/%m/%Y") as cit_date, cit_date_valide, cit_valide, per_prenom, per_nom, p.per_num, AVG(vot_valeur) as vot_valeur ';

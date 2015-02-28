@@ -331,8 +331,11 @@ select {
 blockquote {
     quotes: "\201C""\201D""\2018""\2019";
     padding: 16px;
-    border-left: 6px solid #ccc;
-    background: #f9f9f9;
+    border-left: 4px solid #ddd;
+    color: #666;
+    margin: 0;
+    background-color: #fafafa;
+    border-radius: 2px;
 }
 
 blockquote:before {

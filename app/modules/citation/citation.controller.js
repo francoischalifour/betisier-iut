@@ -38,11 +38,17 @@ module.exports.List = function(req, res) {
                     });
                 }*/
     ], function(err, result) {
-        // TODO: transformer la note (numeric) en string pour que le 0 soit pris en compte par Handlebars.
         res.listeCitation = result[0];
         res.nbCitation = result[0].length;
         res.listeCitationEnAttente = result[1];
         res.nbCitationEnAttente = result[1].length;
+
+        // Change numeric to string so Handlebars doesn't ignore the 0 value.
+        res.listeCitation.forEach(function(vote) {
+            if (vote.vot_valeur === 0) {
+                vote.vot_valeur = vote.vot_valeur.toString();
+            }
+        });
 
         /*if (result[2].hasAlready === 0) {
             res.canVote = true;
@@ -72,10 +78,10 @@ module.exports.Create = function(req, res) {
         var forbidden = false;
 
         var data = req.body;
-        data['per_num_etu'] = req.session.userid;
+        data.per_num_etu = req.session.userid;
 
         Mot.getAllMot(function(err, resultMot) {
-            var citation = data['cit_libelle'].toLowerCase();
+            var citation = data.cit_libelle.toLowerCase();
 
             // Check if there is a forbidden word in the citation.
             resultMot.forEach(function(mot) {
@@ -136,6 +142,12 @@ module.exports.Delete = function(req, res) {
         return;
     }
 
+    // If the user is not allowed.
+    if (!req.session.isAdmin) {
+        res.redirect('/citations/all');
+        return;
+    }
+
     res.title = 'Supprimer une citation';
 
     var cit_num = req.params.id;
@@ -160,6 +172,12 @@ module.exports.Validate = function(req, res) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
+        return;
+    }
+
+    // If the user is not allowed.
+    if (!req.session.isAdmin) {
+        res.redirect('/citations/all');
         return;
     }
 
@@ -241,6 +259,7 @@ module.exports.Search = function(req, res) {
  * @param {object} res
  */
 module.exports.Vote = function(req, res) {
+    // TODO : empêcher de voter une deuxième fois.
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -251,8 +270,12 @@ module.exports.Vote = function(req, res) {
 
     if (req.method === 'POST') {
         var data = req.body;
-        data['cit_num'] = req.params.id;
-        data['per_num'] = req.session.userid;
+        data.cit_num = req.params.id;
+        data.per_num = req.session.userid;
+
+        // Check if the number is between 0 and 20.
+        data.vot_valeur = (data.vot_valeur < 0) ? 0 : data.vot_valeur;
+        data.vot_valeur = (data.vot_valeur > 20) ? 20 : data.vot_valeur;
 
         Citation.noteCitation(data, function(err, result) {
             if (err) {
@@ -290,6 +313,8 @@ module.exports.Vote = function(req, res) {
                     res.canVote = true;
 
                     res.render(path + 'vote', res);
+                } else {
+                    res.render(path + 'voteImpossible', res);
                 }
             });
         });

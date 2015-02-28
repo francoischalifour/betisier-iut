@@ -132,17 +132,22 @@ module.exports.addPersonne = function(data, typePers, callback) {
  * @param  {function} callback
  */
 module.exports.deletePersonne = function(per_num, callback) {
+    // TODO : vérifier que le login n'est pas déjà utilisé.
     db.getConnection(function(err, connection) {
         if (!err) {
-            var isEtudiant = connection.query('SELECT COUNT(*) as resEtu FROM etudiant WHERE per_num = ?', [per_num], callback);
+            connection.query('SELECT per_num FROM etudiant WHERE per_num = ?', [per_num], function(err, result) {
+                if (!err) {
+                    // If this is a Etudiant.
+                    if (result.length === 1)
+                        connection.query('DELETE FROM etudiant WHERE per_num = ?', [per_num], callback);
+                    else
+                        connection.query('DELETE FROM salarie WHERE per_num = ?', [per_num], callback);
 
-            if (isEtudiant) {
-                connection.query('DELETE FROM etudiant WHERE per_num = ?', [per_num], callback);
-            } else {
-                connection.query('DELETE FROM salarie WHERE per_num = ?', [per_num], callback);
-            }
+                    // Delete the person.
+                    connection.query('DELETE FROM personne WHERE per_num = ?', [per_num], callback);
+                }
+            });
 
-            connection.query('DELETE FROM personne WHERE per_num = ?', [per_num], callback);
             connection.release();
         }
     });

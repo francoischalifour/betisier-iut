@@ -59,8 +59,9 @@
             </div>
 
             <div id="salariePanel">
-                <paper-input-decorator floatingLabel label="Téléphone professionnel" flex>
-                    <input is="core-input" type="tel" name="sal_telprof" id="sal_telprof">
+                <paper-input-decorator floatingLabel label="Téléphone professionnel" error="Nombre maximal de caractères atteint">
+                    <input is="core-input" type="tel" name="sal_telprof" id="sal_telprof" maxlength="10">
+                    <paper-char-counter class="counter" target="sal_telprof"></paper-char-counter>
                 </paper-input-decorator>
 
                 <p>

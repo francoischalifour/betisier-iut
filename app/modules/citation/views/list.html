@@ -38,21 +38,21 @@
     <tr>
         <th>Auteur</th>
         <th>Citation</th>
-        <th>Date</th>
-        <th>Note</th>
+        <th class="text-center">Date</th>
+        <th class="text-center">Note</th>
         {{#if ../session.userid}}
         <th class="text-center">Noter</th>
         {{/if}}
         {{#if ../session.isAdmin}}
-        <th>Supprimer</th>
+        <th class="text-center">Supprimer</th>
         {{/if}}
     </tr>
     {{#each listeCitation}}
     <tr>
         <td><a href="/people/{{per_num}}">{{per_prenom}} {{per_nom}}</a></td>
         <td>{{cit_libelle}}</td>
-        <td>{{cit_date}}</td>
-        <td>{{#if vot_valeur}}{{vot_valeur}}{{else}}-{{/if}}</td>
+        <td class="text-center">{{cit_date}}</td>
+        <td class="text-center">{{#if vot_valeur}}{{vot_valeur}}{{else}}-{{/if}}</td>
         {{#if ../session.userid}}
         <td class="text-center">
             <a href="/citations/{{cit_num}}/vote">
@@ -60,7 +60,7 @@
             </a>
         </td>
         {{/if}}
-        {{#if ../session.userid}}
+        {{#if ../session.isAdmin}}
         <td class="text-center">
             <a href="/citations/{{cit_num}}/delete">
                 <core-icon icon="delete"></core-icon>

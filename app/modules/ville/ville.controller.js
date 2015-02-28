@@ -68,6 +68,12 @@ module.exports.Edit = function(req, res) {
         return;
     }
 
+    // If the user is not allowed.
+    if (!req.session.isAdmin) {
+        res.redirect('/villes/all');
+        return;
+    }
+
     res.title = 'Modifier une ville';
     var vil_num = req.params.id;
 
@@ -105,6 +111,12 @@ module.exports.Delete = function(req, res) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
+        return;
+    }
+
+    // If the user is not allowed.
+    if (!req.session.isAdmin) {
+        res.redirect('/villes/all');
         return;
     }
 
