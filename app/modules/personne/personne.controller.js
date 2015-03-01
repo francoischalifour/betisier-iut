@@ -13,13 +13,13 @@ var path = './personne/views/';
  * @param {object} req
  * @param {object} res
  */
-module.exports.List = function(req, res) {
+module.exports.List = function(req, res, next) {
     res.title = 'Liste des personnes';
 
     Personne.getAllPersonne(function(err, result) {
         if (err) {
             console.log(err);
-            return;
+            return next(err);
         }
 
         res.listePersonne = result;
@@ -34,7 +34,7 @@ module.exports.List = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.View = function(req, res) {
+module.exports.View = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -46,7 +46,7 @@ module.exports.View = function(req, res) {
     Personne.getPersonneById(per_num, function(err, result) {
         if (err) {
             console.log(err);
-            return;
+            return next(err);
         }
 
         if (result.length === 0) {
@@ -72,7 +72,7 @@ module.exports.View = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.Create = function(req, res) {
+module.exports.Create = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -102,7 +102,7 @@ module.exports.Create = function(req, res) {
         Personne.addPersonne(data, typePers, function(err, result) {
             if (err) {
                 console.log(err);
-                return;
+                return next(err);
             }
 
             res.render(path + 'createSuccess', res);
@@ -111,20 +111,40 @@ module.exports.Create = function(req, res) {
         async.parallel([
             function(callback) {
                 Departement.getAllDepartement(function(err, resultDep) {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+
                     callback(null, resultDep);
                 });
             },
             function(callback) {
                 Division.getAllDivision(function(err, resultDiv) {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+
                     callback(null, resultDiv);
                 });
             },
             function(callback) {
                 Fonction.getAllFonction(function(err, resultFon) {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+
                     callback(null, resultFon);
                 });
             }
         ], function(err, result) {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+
             res.listeDepartement = result[0];
             res.listeDivision = result[1];
             res.listeFonction = result[2];
@@ -140,7 +160,7 @@ module.exports.Create = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.Delete = function(req, res) {
+module.exports.Delete = function(req, res, next) {
     // TODO : Rediriger vers la page deleteUnknown si la personne n'existe pas.
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
@@ -161,7 +181,7 @@ module.exports.Delete = function(req, res) {
     Personne.deletePersonne(per_num, function(err, result) {
         if (err) {
             console.log(err);
-            return;
+            return next(err);
         }
 
         // If this is the active user, log him out.

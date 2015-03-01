@@ -9,13 +9,13 @@ var path = './ville/views/';
  * @param {object} req
  * @param {object} res
  */
-module.exports.List = function(req, res) {
+module.exports.List = function(req, res, next) {
     res.title = 'Liste des villes';
 
     Ville.getAllVille(function(err, result) {
         if (err) {
             console.log(err);
-            return;
+            return next(err);
         }
 
         res.listeVille = result;
@@ -30,7 +30,7 @@ module.exports.List = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.Create = function(req, res) {
+module.exports.Create = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -45,7 +45,7 @@ module.exports.Create = function(req, res) {
         Ville.addVille(vil_nom, function(err, result) {
             if (err) {
                 console.log(err);
-                return;
+                return next(err);
             }
 
             res.redirect('/villes/all');
@@ -61,7 +61,7 @@ module.exports.Create = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.Edit = function(req, res) {
+module.exports.Edit = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -83,7 +83,7 @@ module.exports.Edit = function(req, res) {
         Ville.editVille(vil_num, vil_nom, function(err, result) {
             if (err) {
                 console.log(err);
-                return;
+                return next(err);
             }
 
             res.redirect('/villes/all');
@@ -92,7 +92,7 @@ module.exports.Edit = function(req, res) {
         Ville.getVilleById(vil_num, function(err, result) {
             if (err) {
                 console.log(err);
-                return;
+                return next(err);
             }
 
             res.ville = result[0];
@@ -107,7 +107,7 @@ module.exports.Edit = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.Delete = function(req, res) {
+module.exports.Delete = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -127,7 +127,7 @@ module.exports.Delete = function(req, res) {
     Ville.deleteVille(vil_num, function(err, result) {
         if (err) {
             console.log(err);
-            return;
+            return next(err);
         }
 
         res.redirect('/villes/all');

@@ -65,7 +65,20 @@ module.exports = function(app) {
      * @type {object}
      * @private
      */
-    var router = require('../router')(app);
+    require('../router')(app);
+
+    /**
+     * Manages error pages.
+     *
+     * @param  {object} err
+     * @param  {object} req
+     * @param  {object} res
+     * @param  {object}
+     */
+    app.use(function(err, req, res, next) {
+        res.title = 'Erreur interne du serveur';
+        res.render('./error/views/500', res);
+    });
 
     /*
      * Configures handlebars.

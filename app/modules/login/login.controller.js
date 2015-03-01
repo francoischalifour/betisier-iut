@@ -9,7 +9,7 @@ var path = './login/views/';
  * @param {object} req
  * @param {object} res
  */
-module.exports.Login = function(req, res) {
+module.exports.Login = function(req, res, next) {
     // If the user is already logged in.
     if (req.session.userid && req.session.username) {
         res.redirect('/');
@@ -24,7 +24,7 @@ module.exports.Login = function(req, res) {
         Personne.checkLogin(data, function(err, result) {
             if (err) {
                 console.log(err);
-                return;
+                return next(err);
             }
 
             if (result.length === 1) {
@@ -57,7 +57,7 @@ module.exports.Login = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.Logout = function(req, res) {
+module.exports.Logout = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');

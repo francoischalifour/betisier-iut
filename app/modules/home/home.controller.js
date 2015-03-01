@@ -9,13 +9,13 @@ var path = './home/views/';
  * @param {object} req
  * @param {object} res
  */
-module.exports.View = function(req, res) {
+module.exports.View = function(req, res, next) {
     res.title = 'Accueil';
 
     Citation.getLastCitation(function(err, result) {
         if (err) {
             console.log(err);
-            return;
+            return next(err);
         }
 
         res.citation = result;

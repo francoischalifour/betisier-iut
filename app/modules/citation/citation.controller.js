@@ -13,31 +13,51 @@ var path = './citation/views/';
  * @param {object} req
  * @param {object} res
  */
-module.exports.List = function(req, res) {
+module.exports.List = function(req, res, next) {
     res.title = 'Liste des citations';
 
     async.parallel([
         // Get all citations.
         function(callback) {
             Citation.getAllCitation(function(err, resultCit) {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+
                 callback(null, resultCit);
             });
         },
         // Get all citations to be validated for the admin.
         function(callback) {
             Citation.getAllCitationEnAttente(function(err, resultCitEnAtt) {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+
                 callback(null, resultCitEnAtt);
             });
         },
         // Has the user already voted?
         /*function(callback) {
-                    var cit_num = resultCit.cit_num;
-                    var per_num = req.session.userid;
-                    Citation.hasAlreadyVoted(cit_num, per_num, function(err, resultCitVot) {
-                        callback(null, resultCitVot);
-                    });
-                }*/
+            var cit_num = resultCit.cit_num;
+            var per_num = req.session.userid;
+            Citation.hasAlreadyVoted(cit_num, per_num, function(err, resultCitVot) {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+
+                callback(null, resultCitVot);
+            });
+        }*/
     ], function(err, result) {
+        if (err) {
+            console.log(err);
+            return next(err);
+        }
+
         res.listeCitation = result[0];
         res.nbCitation = result[0].length;
         res.listeCitationEnAttente = result[1];
@@ -64,7 +84,7 @@ module.exports.List = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.Create = function(req, res) {
+module.exports.Create = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -81,6 +101,11 @@ module.exports.Create = function(req, res) {
         data.per_num_etu = req.session.userid;
 
         Mot.getAllMot(function(err, resultMot) {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+
             var citation = data.cit_libelle.toLowerCase();
 
             // Check if there is a forbidden word in the citation.
@@ -95,7 +120,7 @@ module.exports.Create = function(req, res) {
                 Citation.addCitation(data, function(err, result) {
                     if (err) {
                         console.log(err);
-                        return;
+                        return next(err);
                     }
 
                     res.dataCitation = result;
@@ -111,16 +136,31 @@ module.exports.Create = function(req, res) {
             // Get all persons to show in the list.
             function(callback) {
                 Personne.getAllPersonne(function(err, resultPer) {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+
                     callback(null, resultPer);
                 });
             },
             // Get all forbidden words.
             function(callback) {
                 Mot.getAllMot(function(err, resultMot) {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+
                     callback(null, resultMot);
                 });
             }
         ], function(err, result) {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+
             res.listeSalarie = result[0];
             res.listeMot = result[1];
 
@@ -135,7 +175,7 @@ module.exports.Create = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.Delete = function(req, res) {
+module.exports.Delete = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -155,7 +195,7 @@ module.exports.Delete = function(req, res) {
     Citation.deleteCitation(cit_num, function(err, result) {
         if (err) {
             console.log(err);
-            return;
+            return next(err);
         }
     });
 
@@ -168,7 +208,7 @@ module.exports.Delete = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.Validate = function(req, res) {
+module.exports.Validate = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -189,7 +229,7 @@ module.exports.Validate = function(req, res) {
     Citation.validateCitation(per_num, cit_num, function(err, result) {
         if (err) {
             console.log(err);
-            return;
+            return next(err);
         }
     });
 
@@ -202,7 +242,7 @@ module.exports.Validate = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.Search = function(req, res) {
+module.exports.Search = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -217,7 +257,7 @@ module.exports.Search = function(req, res) {
         Citation.searchCitation(data, function(err, result) {
             if (err) {
                 console.log(err);
-                return;
+                return next(err);
             }
 
             res.title = 'Résultat de la recherche';
@@ -229,20 +269,40 @@ module.exports.Search = function(req, res) {
         async.parallel([
             function(callback) {
                 Personne.getAllPersonne(function(err, resultPer) {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+
                     callback(null, resultPer);
                 });
             },
             function(callback) {
                 Citation.getAllDate(function(err, resultDat) {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+
                     callback(null, resultDat);
                 });
             },
             function(callback) {
                 Citation.getAllMoyenne(function(err, resultMoy) {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+
                     callback(null, resultMoy);
                 });
             }
         ], function(err, result) {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+
             res.title = 'Rechercher des citations';
 
             res.listePersonne = result[0];
@@ -258,7 +318,7 @@ module.exports.Search = function(req, res) {
  * @param {object} req
  * @param {object} res
  */
-module.exports.Vote = function(req, res) {
+module.exports.Vote = function(req, res, next) {
     // TODO : empêcher de voter une deuxième fois.
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
@@ -280,7 +340,7 @@ module.exports.Vote = function(req, res) {
         Citation.noteCitation(data, function(err, result) {
             if (err) {
                 console.log(err);
-                return;
+                return next(err);
             }
 
             res.dataVote = result;
@@ -292,7 +352,7 @@ module.exports.Vote = function(req, res) {
         Citation.getCitationById(cit_num, function(err, result) {
             if (err) {
                 console.log(err);
-                return;
+                return next(err);
             }
 
             var notes = [];
@@ -304,7 +364,7 @@ module.exports.Vote = function(req, res) {
             Citation.hasAlreadyVoted(cit_num, req.session.userid, function(err, resultVoted) {
                 if (err) {
                     console.log(err);
-                    return;
+                    return next(err);
                 }
 
                 if (resultVoted[0].hasAlready === 0) {
