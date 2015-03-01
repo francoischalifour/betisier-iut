@@ -13,7 +13,7 @@
  * @type {object}
  * @private
  */
-var db = require('../../../dbConfig');
+var db = require('../../../config/database');
 
 /**
  * Gets all votes.
