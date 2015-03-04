@@ -260,6 +260,7 @@ module.exports.Validate = function(req, res, next) {
  * @param {object} req
  * @param {object} res
  */
+
 module.exports.Search = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
@@ -338,6 +339,7 @@ module.exports.Search = function(req, res, next) {
  */
 module.exports.Vote = function(req, res, next) {
     // TODO : empêcher de voter une deuxième fois (graphiquement).
+    // TODO : seul les étudiants peuvent noter une citation
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.render('/login');
