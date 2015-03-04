@@ -319,7 +319,7 @@ module.exports.Search = function(req, res, next) {
  * @param {object} res
  */
 module.exports.Vote = function(req, res, next) {
-    // TODO : empêcher de voter une deuxième fois.
+    // TODO : empêcher de voter une deuxième fois (graphiquement).
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');

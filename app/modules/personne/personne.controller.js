@@ -173,6 +173,7 @@ module.exports.Create = function(req, res, next) {
  */
 module.exports.Delete = function(req, res, next) {
     // TODO : Rediriger vers la page deleteUnknown si la personne n'existe pas.
+    // ISSUE : "Can't ser header"
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -203,4 +204,15 @@ module.exports.Delete = function(req, res, next) {
             res.render(path + 'delete', res);
         }
     });
+}
+
+/**
+ * Edits a person.
+ *
+ * @param {object}   req
+ * @param {object}   res
+ * @param {function} next
+ */
+module.exports.Edit = function(req, res, next) {
+
 }

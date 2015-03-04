@@ -16,6 +16,8 @@ var router = express.Router()
 router.get('/all', PersonneController.List);
 router.get('/create', PersonneController.Create);
 router.post('/create', PersonneController.Create);
+router.get('/:id/edit', PersonneController.Edit);
+router.post('/:id/edit', PersonneController.Edit);
 router.get('/:id', PersonneController.View);
 router.get('/:id/delete', PersonneController.Delete);
 
