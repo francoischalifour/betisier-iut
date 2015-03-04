@@ -162,8 +162,6 @@ module.exports.getAllMoyenne = function(callback) {
  * @param {object}   data Citation data
  * @param {function} callback
  */
-
-// TODO : seul les etudiants et admin peuvent ajouter
 module.exports.addCitation = function(data, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
@@ -221,14 +219,12 @@ module.exports.validateCitation = function(per_num, cit_num, callback) {
  * @param  {function} callback
  */
 module.exports.searchCitation = function(data, callback) {
-    // TODO : +/- un point -> connection.escape ?
-    // TODO : pb de recherche lorsqu'il n'y a pas de note
     db.getConnection(function(err, connection) {
         var req;
         req = 'SELECT c.cit_num, cit_libelle, DATE_FORMAT(cit_date, "%d/%m/%Y") as cit_date, cit_date_valide, cit_valide, per_prenom, per_nom, p.per_num, AVG(vot_valeur) as vot_valeur ';
         req += 'FROM citation c ';
-        req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
-        req += 'INNER JOIN vote v ON v.cit_num = c.cit_num ';
+        req += 'LEFT JOIN personne p ON p.per_num = c.per_num ';
+        req += 'LEFT JOIN vote v ON v.cit_num = c.cit_num ';
         req += 'WHERE cit_valide = 1 ';
 
         if (data.search)
@@ -245,6 +241,7 @@ module.exports.searchCitation = function(data, callback) {
 
         if (data.vot_valeur && data.vot_valeur != 0)
             req += 'AND vot_valeur BETWEEN ' + (parseInt(data.vot_valeur) - 1) + ' AND ' + (parseInt(data.vot_valeur) + 1) + ' ' ;
+
         req += 'GROUP BY c.cit_num '
         req += 'ORDER BY cit_date DESC';
 

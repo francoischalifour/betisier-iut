@@ -1,12 +1,14 @@
 'use strict';
 
+var async = require('async');
+
 var Citation = require('./citation.model');
 var Personne = require('../personne/personne.model');
 var Mot = require('../mot/mot.model');
 var Vote = require('../vote/vote.model');
-var LoginController = require('../login/login.controller');
+
 var ErrorController = require('../error/error.controller');
-var async = require('async');
+
 var path = './citation/views/';
 
 /**
@@ -102,12 +104,25 @@ module.exports.List = function(req, res, next) {
  * @param {object} req
  * @param {object} res
  */
+// TODO : seul les etudiants et admin peuvent ajouter
 module.exports.Create = function(req, res, next) {
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
         return;
     }
+
+    Personne.isSalarie(req.session.userid, function(err, resultPerType) {
+        if (err) {
+            console.log(err);
+            return next(err);
+        }
+
+        if (resultPerType[0].per_type === 1) {
+            ErrorController.ActionImpossible(req, res); // Bug des headers
+            return;
+        }
+    });
 
     res.title = 'Ajouter une citation';
 
@@ -339,7 +354,6 @@ module.exports.Search = function(req, res, next) {
  */
 module.exports.Vote = function(req, res, next) {
     // TODO : empêcher de voter une deuxième fois (graphiquement).
-    // TODO : seul les étudiants peuvent noter une citation
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.render('/login');

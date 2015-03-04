@@ -1,11 +1,13 @@
 'use strict';
 
+var async = require('async');
+
 var Personne = require('./personne.model');
 var Departement = require('../departement/departement.model');
 var Division = require('../division/division.model');
 var Fonction = require('../fonction/fonction.model');
 var Ville = require('../ville/ville.model');
-var async = require('async');
+
 var path = './personne/views/';
 
 /**
@@ -37,10 +39,10 @@ module.exports.List = function(req, res, next) {
  */
 module.exports.View = function(req, res, next) {
     // If the user is not logged in.
-/*    if (!req.session.userid || !req.session.username) {
+    if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
         return;
-    }*/
+    }
 
     var per_num = req.params.id;
 
@@ -215,18 +217,19 @@ module.exports.Delete = function(req, res, next) {
  * @param {function} next
  */
 module.exports.Edit = function(req, res, next) {
-    // ISSUE : Headers already sent
+    // ISSUE : Headers already sent.
+    // TODO : sélectionner les valeurs par défaut dans les selects.
     // If the user is not logged in.
-    /*    if (!req.session.userid || !req.session.username) {
-            res.redirect('/login');
-            return;
-        }
+    if (!req.session.userid || !req.session.username) {
+        res.redirect('/login');
+        return;
+    }
 
-        // If the active user is not allowed.
-        if (!req.session.isAdmin && parseInt(per_num) !== req.session.userid) {
-            res.redirect('/people/all');
-            return;
-        }*/
+    // If the active user is not allowed.
+    if (!req.session.isAdmin && parseInt(per_num) !== req.session.userid) {
+        res.redirect('/people/all');
+        return;
+    }
 
     res.title = 'Editer un profil';
 

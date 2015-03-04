@@ -1,6 +1,7 @@
 'use strict';
 
 var Ville = require('./ville.model');
+
 var path = './ville/views/';
 
 /**
