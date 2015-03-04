@@ -58,10 +58,11 @@ module.exports.getPersonneById = function(per_num, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req;
-            req = 'SELECT p.per_num, per_prenom, per_nom, per_tel, per_mail, per_admin, fon_libelle, vil_nom, dep_nom, sal_telprof ';
+            req = 'SELECT p.per_num, per_prenom, per_nom, per_tel, per_mail, per_admin, fon_libelle, vil_nom, dep_nom, div_nom, sal_telprof ';
             req += 'FROM personne p ';
             req += 'LEFT JOIN etudiant e ON e.per_num = p.per_num ';
             req += 'LEFT JOIN departement d ON d.dep_num = e.dep_num ';
+            req += 'LEFT JOIN division di ON di.div_num = e.div_num ';
             req += 'LEFT JOIN ville v ON v.vil_num = d.vil_num ';
             req += 'LEFT JOIN salarie s ON s.per_num = p.per_num ';
             req += 'LEFT JOIN fonction f ON f.fon_num = s.fon_num ';
@@ -162,6 +163,67 @@ module.exports.deletePersonne = function(per_num, callback) {
                 }
             });
 
+            connection.release();
+        }
+    });
+}
+
+/**
+ * Edits a person.
+ *
+ * @param  {number}   per_num  Person's id
+ * @param  {function} callback
+ */
+module.exports.editPersonne = function(data, per_num, callback) {
+    db.getConnection(function(err, connection) {
+        if (!err) {
+            // Update the person.
+            var personne = {
+                per_nom: data.per_nom,
+                per_prenom: data.per_prenom,
+                per_tel: data.per_tel,
+                per_mail: data.per_mail
+            };
+
+            connection.query('UPDATE personne SET ? WHERE per_num = ?', [personne, per_num], callback);
+
+            connection.query('SELECT per_num FROM etudiant WHERE per_num = ?', [per_num], function(err, result) {
+                if (!err) {
+                    // If this is a Etudiant.
+                    if (result.length === 1) {
+                        var etudiant = {
+                            dep_num: data.dep_num,
+                            div_num: data.div_num
+                        };
+
+                        connection.query('UPDATE etudiant SET ? WHERE per_num = ?', [etudiant, per_num], callback);
+                    } else {
+                        var salarie = {
+                            sal_telprof: data.sal_telprof,
+                            fon_num: data.fon_num
+                        };
+
+                        connection.query('UPDATE salarie SET ? WHERE per_num = ?', [salarie, per_num], callback);
+                    }
+                }
+            });
+
+            connection.release();
+        }
+    });
+}
+
+/**
+ * Checks if the person is a Salarié.
+ *
+ * @param  {number}   per_num  Person's id
+ * @param  {function} callback
+ * @return {boolean} true if has, false if has not
+ */
+module.exports.isSalarie = function(per_num, callback) {
+    db.getConnection(function(err, connection) {
+        if (!err) {
+            connection.query('SELECT COUNT(*) AS per_type FROM salarie WHERE per_num = ?', [per_num], callback);
             connection.release();
         }
     });

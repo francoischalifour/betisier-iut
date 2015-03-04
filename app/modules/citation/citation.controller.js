@@ -4,6 +4,8 @@ var Citation = require('./citation.model');
 var Personne = require('../personne/personne.model');
 var Mot = require('../mot/mot.model');
 var Vote = require('../vote/vote.model');
+var LoginController = require('../login/login.controller');
+var ErrorController = require('../error/error.controller');
 var async = require('async');
 var path = './citation/views/';
 
@@ -39,6 +41,17 @@ module.exports.List = function(req, res, next) {
                 callback(null, resultCitEnAtt);
             });
         },
+        // Get the person's type.
+        function(callback) {
+            Personne.isSalarie(req.session.userid, function(err, resultPerType) {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+
+                callback(null, resultPerType);
+            });
+        },
         // Has the user already voted?
         /*function(callback) {
             var cit_num = resultCit.cit_num;
@@ -62,6 +75,11 @@ module.exports.List = function(req, res, next) {
         res.nbCitation = result[0].length;
         res.listeCitationEnAttente = result[1];
         res.nbCitationEnAttente = result[1].length;
+
+        // If the user is a student or an admin, he can vote.
+        if (result[2].per_type === 0 || req.session.isAdmin) {
+            res.canVote = true;
+        }
 
         // Change numeric to string so Handlebars doesn't ignore the 0 value.
         res.listeCitation.forEach(function(vote) {
@@ -322,9 +340,19 @@ module.exports.Vote = function(req, res, next) {
     // TODO : empêcher de voter une deuxième fois (graphiquement).
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
-        res.redirect('/login');
+        res.render('/login');
         return;
     }
+
+    Personne.isSalarie(req.session.userid, function(err, resultPerType) {
+        if (err) {
+            console.log(err);
+            return next(err);
+        }
+
+        ErrorController.ActionImpossible(req, res);
+        return;
+    });
 
     res.title = 'Noter une citation';
 

@@ -1,4 +1,4 @@
-{{#if user.per_nom}}
+{{#if user.per_prenom}}
 <div layout horizontal center-justified>
     <div class="card">
 
@@ -17,7 +17,7 @@
         {{/if}} {{#if user.dep_nom}}
         <p>
             <core-icon icon="social:domain"></core-icon>
-            {{user.dep_nom}}
+            {{user.dep_nom}} ({{user.div_nom}})
         </p>
 
         <p>

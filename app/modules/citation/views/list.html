@@ -40,7 +40,7 @@
         <th>Citation</th>
         <th class="text-center">Date</th>
         <th class="text-center">Note</th>
-        {{#if ../session.userid}}
+        {{#if ../canVote}}
         <th class="text-center">Noter</th>
         {{/if}}
         {{#if ../session.isAdmin}}
@@ -54,11 +54,13 @@
         <td class="text-center">{{cit_date}}</td>
         <td class="text-center">{{#if vot_valeur}}{{vot_valeur}}{{else}}-{{/if}}</td>
         {{#if ../session.userid}}
+        {{#if ../canVote}}
         <td class="text-center">
             <a href="/citations/{{cit_num}}/vote">
                 <core-icon icon="editor:mode-edit"></core-icon>
             </a>
         </td>
+        {{/if}}
         {{/if}}
         {{#if ../session.isAdmin}}
         <td class="text-center">

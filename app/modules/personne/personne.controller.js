@@ -4,6 +4,7 @@ var Personne = require('./personne.model');
 var Departement = require('../departement/departement.model');
 var Division = require('../division/division.model');
 var Fonction = require('../fonction/fonction.model');
+var Ville = require('../ville/ville.model');
 var async = require('async');
 var path = './personne/views/';
 
@@ -36,10 +37,10 @@ module.exports.List = function(req, res, next) {
  */
 module.exports.View = function(req, res, next) {
     // If the user is not logged in.
-    if (!req.session.userid || !req.session.username) {
+/*    if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
         return;
-    }
+    }*/
 
     var per_num = req.params.id;
 
@@ -173,7 +174,7 @@ module.exports.Create = function(req, res, next) {
  */
 module.exports.Delete = function(req, res, next) {
     // TODO : Rediriger vers la page deleteUnknown si la personne n'existe pas.
-    // ISSUE : "Can't ser header"
+    // ISSUE : "Can't set headers after they are sent."
     // If the user is not logged in.
     if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
@@ -214,5 +215,102 @@ module.exports.Delete = function(req, res, next) {
  * @param {function} next
  */
 module.exports.Edit = function(req, res, next) {
+    // ISSUE : Headers already sent
+    // If the user is not logged in.
+    /*    if (!req.session.userid || !req.session.username) {
+            res.redirect('/login');
+            return;
+        }
 
+        // If the active user is not allowed.
+        if (!req.session.isAdmin && parseInt(per_num) !== req.session.userid) {
+            res.redirect('/people/all');
+            return;
+        }*/
+
+    res.title = 'Editer un profil';
+
+    var per_num = req.params.id;
+
+    if (req.method == 'POST') {
+        var data = req.body;
+
+        console.log(data);
+
+        Personne.editPersonne(data, per_num, function(err, result) {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+
+            res.render(path + 'editSuccess', res);
+        });
+    } else {
+        async.parallel([
+                function(callback) {
+                    Personne.getPersonneById(per_num, function(err, resultPer) {
+                        if (err) {
+                            console.log(err);
+                            return next(err);
+                        }
+
+                        callback(null, resultPer);
+                    });
+                },
+                function(callback) {
+                    Departement.getAllDepartement(function(err, resultDep) {
+                        if (err) {
+                            console.log(err);
+                            return next(err);
+                        }
+
+                        callback(null, resultDep);
+                    });
+                },
+                function(callback) {
+                    Division.getAllDivision(function(err, resultDiv) {
+                        if (err) {
+                            console.log(err);
+                            return next(err);
+                        }
+
+                        callback(null, resultDiv);
+                    });
+                },
+                function(callback) {
+                    Ville.getAllVille(function(err, resultVil) {
+                        if (err) {
+                            console.log(err);
+                            return next(err);
+                        }
+
+                        callback(null, resultVil);
+                    });
+                },
+                function(callback) {
+                    Fonction.getAllFonction(function(err, resultFon) {
+                        if (err) {
+                            console.log(err);
+                            return next(err);
+                        }
+
+                        callback(null, resultFon);
+                    });
+                }
+            ],
+            function(err, result) {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+
+                res.user = result[0][0];
+                res.listeDepartement = result[1];
+                res.listeDivision = result[2];
+                res.listeVille = result[3];
+                res.listeFonction = result[4];
+
+                res.render(path + 'edit', res);
+            });
+    }
 }
