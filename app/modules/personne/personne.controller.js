@@ -99,13 +99,24 @@ module.exports.Create = function(req, res, next) {
         // Remove the person type from the data object.
         delete data.per_type;
 
-        Personne.addPersonne(data, typePers, function(err, result) {
+        Personne.loginHasAlreadyBeTaken(data.per_login, function(err, result) {
             if (err) {
                 console.log(err);
                 return next(err);
             }
 
-            res.render(path + 'createSuccess', res);
+            if (result[0].hasAlready === 0) {
+                Personne.addPersonne(data, typePers, function(err, result) {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+
+                    res.render(path + 'createSuccess', res);
+                });
+            } else {
+                res.render(path + 'createFailedLogin', res);
+            }
         });
     } else {
         async.parallel([

@@ -126,13 +126,27 @@ module.exports.addPersonne = function(data, typePers, callback) {
 }
 
 /**
+ * Checks if the login already exists.
+ * @param  {string}   per_login Login of the new person
+ * @param  {function} callback
+ * @return {boolen} true if the login already exists, false if not
+ */
+module.exports.loginHasAlreadyBeTaken = function(per_login, callback) {
+    db.getConnection(function(err, connection) {
+        if (!err) {
+            connection.query('SELECT COUNT(*) AS hasAlready FROM personne WHERE per_login = ?', [per_login], callback);
+            connection.release();
+        }
+    });
+}
+
+/**
  * Deletes a person.
  *
  * @param  {number}   per_num  Id of the person to delete
  * @param  {function} callback
  */
 module.exports.deletePersonne = function(per_num, callback) {
-    // TODO : vérifier que le login n'est pas déjà utilisé.
     db.getConnection(function(err, connection) {
         if (!err) {
             connection.query('SELECT per_num FROM etudiant WHERE per_num = ?', [per_num], function(err, result) {
