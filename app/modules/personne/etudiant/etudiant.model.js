@@ -14,7 +14,7 @@
  * @type {object}
  * @private
  */
-var db = require('../../../config/database');
+var db = require('../../../../config/database');
 
 /**
  * Gets a student given by its id.

@@ -4,6 +4,7 @@ var async = require('async');
 
 var Citation = require('./citation.model');
 var Personne = require('../personne/personne.model');
+var Salarie = require('../personne/salarie/salarie.model');
 var Mot = require('../mot/mot.model');
 var Vote = require('../vote/vote.model');
 
@@ -166,9 +167,9 @@ module.exports.Create = function(req, res, next) {
     } else {
         // Show the creation page.
         async.parallel([
-            // Get all persons to show in the list.
+            // Get all Salariés to show in the list.
             function(callback) {
-                Personne.getAllPersonne(function(err, resultPer) {
+                Salarie.getAllSalarie(function(err, resultPer) {
                     if (err) {
                         console.log(err);
                         return next(err);
@@ -302,7 +303,7 @@ module.exports.Search = function(req, res, next) {
     } else {
         async.parallel([
             function(callback) {
-                Personne.getAllPersonne(function(err, resultPer) {
+                Salarie.getAllSalarie(function(err, resultPer) {
                     if (err) {
                         console.log(err);
                         return next(err);

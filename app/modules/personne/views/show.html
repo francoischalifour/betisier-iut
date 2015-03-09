@@ -4,17 +4,30 @@
 
         <div class="card-header">{{user.per_prenom}} {{user.per_nom}}</div>
 
+        <p>
+            <core-icon icon="account-circle"></core-icon>
+            {{#if user.dep_nom}}
+            Etudiant
+            {{else}}
+            Salarié
+            {{/if}}
+        </p>
+
         {{#if user.per_tel}}
         <p>
             <core-icon icon="communication:phone"></core-icon>
-            {{user.per_tel}}
+            <span id="per_tel">{{user.per_tel}}</span>
+            <canvas id="per_tel_canvas"></canvas>
         </p>
-        {{/if}} {{#if user.per_mail}}
+        {{/if}}
+        {{#if user.per_mail}}
         <p>
             <core-icon icon="mail"></core-icon>
             <a href="mailto:{{user.per_mail}}">{{user.per_mail}}</a>
         </p>
-        {{/if}} {{#if user.dep_nom}}
+        {{/if}}
+
+        {{#if user.dep_nom}}
         <p>
             <core-icon icon="social:domain"></core-icon>
             {{user.dep_nom}} ({{user.div_nom}})
@@ -54,7 +67,8 @@
         </a>
     </paper-button>
 </div>
-{{/if}} {{else}}
+{{/if}}
+{{else}}
 <div horizontal center-justified layout>
     <div class="card">
         <p class="text-center">Cet utilisateur n'existe pas.</p>
@@ -66,3 +80,23 @@
     </div>
 </div>
 {{/if}}
+
+<script>
+    (function() {
+        'use strict';
+
+        var per_tel_span = document.getElementById('per_tel');
+        var per_tel = per_tel_span.innerText;
+
+        if (!per_tel)
+            return;
+
+        per_tel_span.remove();
+        var context = document.getElementById('per_tel_canvas').getContext('2d');
+
+        context.canvas.width = 100;
+        context.canvas.height = 20;
+        context.font = '14px RobotoDraft';
+        context.fillText(per_tel, 0, 20);
+    })();
+</script>
