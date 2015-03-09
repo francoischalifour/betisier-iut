@@ -61,11 +61,20 @@
     </paper-button>
 
     <paper-button>
-        <a href="/people/{{user.per_num}}/delete">
+        <a href="#" id="deleteLink">
             <core-icon icon="delete"></core-icon>
             Supprimer le profil
         </a>
     </paper-button>
+
+    <paper-action-dialog backdrop layered="false" transition="core-transition-center" id="deletePanel" heading="Êtes-vous sûr de vouloir supprimer l'utilisateur ?">
+        <p>La suppression de cet utilisateur entraînera la suppression de toutes ses informations sur le site.</p>
+
+        <paper-button affirmative>Non</paper-button>
+        <paper-button class="primary" affirmative autofocus>
+            <a href="/people/{{user.per_num}}/delete">Oui</a>
+        </paper-button>
+    </paper-action-dialog>
 </div>
 {{/if}}
 {{else}}
@@ -82,14 +91,18 @@
 {{/if}}
 
 <script>
+    /**
+     * Turns the telephone number into canvas.
+     */
     (function() {
         'use strict';
 
         var per_tel_span = document.getElementById('per_tel');
-        var per_tel = per_tel_span.innerText;
 
-        if (!per_tel)
+        if (!per_tel_span)
             return;
+
+        var per_tel = per_tel_span.innerText;
 
         per_tel_span.remove();
         var context = document.getElementById('per_tel_canvas').getContext('2d');
@@ -98,5 +111,15 @@
         context.canvas.height = 20;
         context.font = '14px RobotoDraft';
         context.fillText(per_tel, 0, 20);
+    })();
+
+    (function() {
+        /**
+         * Shows the delete panel.
+         */
+        document.getElementById('deleteLink').onclick = function(e) {
+            e.preventDefault();
+            document.getElementById('deletePanel').toggle();
+        }
     })();
 </script>

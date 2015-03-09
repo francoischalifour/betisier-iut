@@ -40,7 +40,7 @@
                 <p>
                     <label for="dep_num">Département</label>
                     <select name="dep_num" id="dep_num" required>
-                        <option value="-1" disabled="disabled">Sélectionnez un département</option>
+                        <option value="" disabled="disabled">Sélectionnez un département</option>
                         {{#each listeDepartement}}
                         <option value="{{dep_num}}">{{dep_nom}}</option>
                         {{/each}}
@@ -50,7 +50,7 @@
                 <p>
                     <label for="div_num">Division</label>
                     <select name="div_num" id="div_num" required>
-                        <option value="-1" disabled="disabled">Sélectionnez une division</option>
+                        <option value="" disabled="disabled">Sélectionnez une division</option>
                         {{#each listeDivision}}
                         <option value="{{div_num}}">{{div_nom}}</option>
                         {{/each}}
@@ -67,7 +67,7 @@
                 <p>
                     <label for="fon_num">Fonction</label>
                     <select name="fon_num" id="fon_num">
-                        <option value="-1" disabled="disabled">Sélectionnez une fonction</option>
+                        <option value="" disabled="disabled">Sélectionnez une fonction</option>
                         {{#each listeFonction}}
                         <option value="{{fon_num}}">{{fon_libelle}}</option>
                         {{/each}}
@@ -106,28 +106,24 @@
     function togglePanel() {
         if (etudiantButton.checked) {
             // Add / remove required property.
-            document.getElementById('sal_telprof').setAttribute('required', 'false');
-            document.getElementById('fon_num').setAttribute('required', 'false');
+            document.getElementById('sal_telprof').removeAttribute('required');
+            document.getElementById('fon_num').removeAttribute('required');
             document.getElementById('dep_num').setAttribute('required', 'required');
             document.getElementById('div_num').setAttribute('required', 'required');
 
             // Show / hide panel
             salariePanel.style.display = 'none';
             etudiantPanel.style.display = 'block';
-
-            console.log(document.getElementById('sal_telprof'));
         } else {
             // Add / remove required property.
-            document.getElementById('dep_num').setAttribute('required', 'false');
-            document.getElementById('div_num').setAttribute('required', 'false');
+            document.getElementById('dep_num').removeAttribute('required');
+            document.getElementById('div_num').removeAttribute('required');
             document.getElementById('sal_telprof').setAttribute('required', 'required');
             document.getElementById('fon_num').setAttribute('required', 'required');
 
             // Show / hide panel
             salariePanel.style.display = 'block';
             etudiantPanel.style.display = 'none';
-
-            console.log(document.getElementById('sal_telprof'));
         }
     }
 })();

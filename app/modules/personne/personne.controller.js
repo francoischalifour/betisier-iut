@@ -183,6 +183,8 @@ module.exports.Delete = function(req, res, next) {
         return;
     }
 
+    var per_num = req.params.id;
+
     // If the active user is not allowed.
     if (!req.session.isAdmin && parseInt(per_num) !== req.session.userid) {
         res.redirect('/people/all');
@@ -190,8 +192,6 @@ module.exports.Delete = function(req, res, next) {
     }
 
     res.title = 'Supprimer un utilisateur';
-
-    var per_num = req.params.id;
 
     Personne.deletePersonne(per_num, function(err, result) {
         if (err) {
@@ -225,6 +225,8 @@ module.exports.Edit = function(req, res, next) {
         return;
     }
 
+    var per_num = req.params.id;
+
     // If the active user is not allowed.
     if (!req.session.isAdmin && parseInt(per_num) !== req.session.userid) {
         res.redirect('/people/all');
@@ -233,9 +235,7 @@ module.exports.Edit = function(req, res, next) {
 
     res.title = 'Editer un profil';
 
-    var per_num = req.params.id;
-
-    if (req.method == 'POST') {
+    if (req.method === 'POST') {
         var data = req.body;
 
         console.log(data);

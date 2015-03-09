@@ -8,6 +8,7 @@ var Salarie = require('../personne/salarie/salarie.model');
 var Mot = require('../mot/mot.model');
 var Vote = require('../vote/vote.model');
 
+var LoginController = require('../login/login.controller');
 var ErrorController = require('../error/error.controller');
 
 var path = './citation/views/';
@@ -108,10 +109,7 @@ module.exports.List = function(req, res, next) {
 // TODO : seul les etudiants et admin peuvent ajouter
 module.exports.Create = function(req, res, next) {
     // If the user is not logged in.
-    if (!req.session.userid || !req.session.username) {
-        res.redirect('/login');
-        return;
-    }
+    var salarie;
 
     Personne.isSalarie(req.session.userid, function(err, resultPerType) {
         if (err) {
@@ -119,11 +117,18 @@ module.exports.Create = function(req, res, next) {
             return next(err);
         }
 
-        if (resultPerType[0].per_type === 1) {
-            ErrorController.ActionImpossible(req, res); // Bug des headers
-            return;
-        }
+        salarie = resultPerType[0].per_type;
+        console.log('1 :' + salarie);
+        console.log('2 :' + !!salarie)
     });
+
+    console.log('3 :' + salarie);
+    console.log('4 :' + !!salarie);
+
+    if (!req.session.userid || !req.session.username || !!salarie) {
+        res.redirect('/login');
+        return;
+    }
 
     res.title = 'Ajouter une citation';
 

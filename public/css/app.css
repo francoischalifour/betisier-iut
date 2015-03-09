@@ -67,6 +67,10 @@ core-toolbar {
     background-color: #f44336;
 }
 
+core-toolbar a core-icon {
+    color: #fff;
+}
+
 @media(max-width:640px) {
     #mainheader.tall {
         height: auto;
@@ -143,6 +147,10 @@ paper-checkbox {
 
 .list-unstyled {
     list-style: none;
+}
+
+.primary {
+    color: #f44336;
 }
 
 /* ---------------------------------------------------- *\
