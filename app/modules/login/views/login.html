@@ -9,9 +9,12 @@
         </p>
     </div>
 </div>
-{{else}} {{#if error}}
+{{else}}
+
+{{#if error}}
 <paper-toast text="Vos identifiants sont incorrects." opened="true"></paper-toast>
 {{/if}}
+
 <div horizontal center-justified layout>
 
     <div class="card">
@@ -26,13 +29,74 @@
                 <input is="core-input" type="password" name="password" id="password">
             </paper-input-decorator>
 
-            <div horizontal center-justified layout>
-                <button type="submit" is="paper-button-submit">
+            <div id="loginBox" horizontal center-justified layout>
+                <button type="submit" is="paper-button-submit" id="loginBtn">
                     Se connecter
                 </button>
+            </div>
+
+            <div horizontal center-justified layout>
+                <p>
+                    Maintenir le bouton <strong>1 seconde</strong> pour se connecter
+                </p>
+                <paper-toast id="robotToast" text="Êtes-vous un robot ?"><div id="notARobot" style="color: #eeff41;">Non</div></paper-toast>
             </div>
         </form>
     </div>
 
 </div>
+
+<script>
+(function() {
+    'use strict';
+
+    // TODO: Choisir parmi les deux versions : appui long sur "Se connecter" ou vérification par paper-toast
+
+    //var start;
+    var loginForm = document.querySelector('form');
+    //var loginBtn = document.getElementById('loginBtn');
+
+    /**
+     * Avoids to send the form the normal way.
+     * @return {boolean} false
+     */
+    loginForm.onsubmit = function() {
+        document.getElementById('robotToast').show(); // A enlever si on choisit la première version.
+
+        return false;
+    }
+
+    /**
+     * Starts a new counter.
+     */
+/*    loginBtn.onmousedown = function() {
+        start = new Date().getTime();
+    }*/
+
+    /**
+     * Sends the form if the user has held the button long enough, show a paper toast else.
+     */
+/*    loginBtn.onmouseup = function() {
+        if (new Date().getTime() >= (start + 1000)) {
+            loginForm.submit();
+        } else {
+            document.getElementById('robotToast').show();
+        }
+    }*/
+
+    /**
+     * Restars the counter.
+     */
+/*    loginBtn.onmouseleave = function() {
+        start = 0;
+    }*/
+
+    /**
+     * Sends the form if the user click on the "Non" button on the paper toast.
+     */
+    document.getElementById('notARobot').onclick = function() {
+        loginForm.submit();
+    }
+})();
+</script>
 {{/if}}
