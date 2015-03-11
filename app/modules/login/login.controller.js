@@ -18,7 +18,7 @@ module.exports.Login = function(req, res, next) {
 
     res.title = 'Connexion';
 
-    if (req.method == 'POST') {
+    if (req.method === 'POST') {
         var data = req.body;
 
         Personne.checkLogin(data, function(err, result) {

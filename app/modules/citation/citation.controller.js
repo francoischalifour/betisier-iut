@@ -365,16 +365,6 @@ module.exports.Vote = function(req, res, next) {
         return;
     }
 
-    Personne.isSalarie(req.session.userid, function(err, resultPerType) {
-        if (err) {
-            console.log(err);
-            return next(err);
-        }
-
-        ErrorController.ActionImpossible(req, res);
-        return;
-    });
-
     res.title = 'Noter une citation';
 
     if (req.method === 'POST') {
