@@ -106,7 +106,6 @@ module.exports.List = function(req, res, next) {
  * @param {object} req
  * @param {object} res
  */
-// TODO : seul les etudiants et admin peuvent ajouter
 module.exports.Create = function(req, res, next) {
     // If the user is not logged in.
     var salarie;
