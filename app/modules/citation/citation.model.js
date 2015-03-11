@@ -163,6 +163,7 @@ module.exports.getAllMoyenne = function(callback) {
  * @param {function} callback
  */
 module.exports.addCitation = function(data, callback) {
+    // TODO problème de date 00:00:0000
     db.getConnection(function(err, connection) {
         if (!err) {
             connection.query('INSERT INTO citation SET ?', data, callback);
@@ -260,6 +261,7 @@ module.exports.searchCitation = function(data, callback) {
  */
 
 module.exports.noteCitation = function(data, callback) {
+    //TODO : Etudiants ne peux pas noter ..
     db.getConnection(function(err, connection) {
         if (!err) {
             connection.query('INSERT INTO vote SET ?', data, callback);
