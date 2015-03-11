@@ -29,10 +29,12 @@
     </paper-item>
 
     {{#if session.userid}}
+    {{#unless session.isSalarie}}
     <paper-item>
         <core-icon icon="add"></core-icon>
         <a href="/citations/create">Ajouter une citation</a>
     </paper-item>
+    {{/unless}}
 
     <paper-item class="divider">
         <core-icon icon="search"></core-icon>

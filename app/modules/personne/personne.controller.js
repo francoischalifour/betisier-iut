@@ -87,7 +87,7 @@ module.exports.Create = function(req, res, next) {
     if (req.method === 'POST') {
         var data = req.body;
 
-        // Type of person (0 for étudiant, 1 for salarié).
+        // Type of person (0 for student, 1 for employee).
         var typePers = data.per_type;
 
         // Remove inapropriate data.
@@ -176,13 +176,6 @@ module.exports.Create = function(req, res, next) {
  */
 module.exports.Delete = function(req, res, next) {
     // TODO : Rediriger vers la page deleteUnknown si la personne n'existe pas.
-    // ISSUE : "Can't set headers after they are sent."
-    // If the user is not logged in.
-    if (!req.session.userid || !req.session.username) {
-        res.redirect('/login');
-        return;
-    }
-
     var per_num = req.params.id;
 
     // If the active user is not allowed.
@@ -198,15 +191,15 @@ module.exports.Delete = function(req, res, next) {
             console.log(err);
             return next(err);
         }
-
-        // If this is the active user, log him out.
-        if (parseInt(per_num) === req.session.userid) {
-            res.redirect('/logout');
-            return;
-        } else {
-            res.render(path + 'delete', res);
-        }
     });
+
+    // If this is the active user, log him out.
+    if (parseInt(per_num) === req.session.userid) {
+        res.redirect('/logout');
+        return;
+    } else {
+        res.render(path + 'delete', res);
+    }
 }
 
 /**
