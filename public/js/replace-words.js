@@ -20,10 +20,11 @@
                 document.getElementById('error').innerHTML = '<p><core-icon icon="error"></core-icon> Le mot <em>' + mot + '</em> n\'est pas autorisé.</p>';
 
                 // Replace forbidden words with asterisks.
-                var newCitation = (citation.toLowerCase()).replace(mot, function(s) {
+                var newCitation = citation.replace(mot.toLowerCase(), function(mot) {
                     var lettre = 0;
                     var asterisks = '';
-                    while (lettre < s.length) {
+
+                    while (lettre < mot.length) {
                         asterisks += '*';
                         lettre++;
                     }

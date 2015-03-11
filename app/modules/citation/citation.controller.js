@@ -106,26 +106,9 @@ module.exports.List = function(req, res, next) {
  * @param {object} req
  * @param {object} res
  */
-// TODO : seul les etudiants et admin peuvent ajouter
 module.exports.Create = function(req, res, next) {
-    // If the user is not logged in.
-    var salarie;
-
-    Personne.isSalarie(req.session.userid, function(err, resultPerType) {
-        if (err) {
-            console.log(err);
-            return next(err);
-        }
-
-        salarie = resultPerType[0].per_type;
-        console.log('1 :' + salarie);
-        console.log('2 :' + !!salarie)
-    });
-
-    console.log('3 :' + salarie);
-    console.log('4 :' + !!salarie);
-
-    if (!req.session.userid || !req.session.username || !!salarie) {
+    // If the user is not logged in or is an employee.
+    if (!req.session.userid || !req.session.username || req.session.isSalarie) {
         res.redirect('/login');
         return;
     }
@@ -215,12 +198,6 @@ module.exports.Create = function(req, res, next) {
  * @param {object} res
  */
 module.exports.Delete = function(req, res, next) {
-    // If the user is not logged in.
-    if (!req.session.userid || !req.session.username) {
-        res.redirect('/login');
-        return;
-    }
-
     // If the user is not allowed.
     if (!req.session.isAdmin) {
         res.redirect('/citations/all');
@@ -248,12 +225,6 @@ module.exports.Delete = function(req, res, next) {
  * @param {object} res
  */
 module.exports.Validate = function(req, res, next) {
-    // If the user is not logged in.
-    if (!req.session.userid || !req.session.username) {
-        res.redirect('/login');
-        return;
-    }
-
     // If the user is not allowed.
     if (!req.session.isAdmin) {
         res.redirect('/citations/all');
@@ -360,9 +331,9 @@ module.exports.Search = function(req, res, next) {
  */
 module.exports.Vote = function(req, res, next) {
     // TODO : empêcher de voter une deuxième fois (graphiquement).
-    // If the user is not logged in.
-    if (!req.session.userid || !req.session.username) {
-        res.render('/login');
+    // If the user is not logged in or is an employee.
+    if (!req.session.userid || !req.session.username || req.session.isSalarie) {
+        res.redirect('/login');
         return;
     }
 
