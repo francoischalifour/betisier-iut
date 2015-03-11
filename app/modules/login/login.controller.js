@@ -33,7 +33,23 @@ module.exports.Login = function(req, res, next) {
                 req.session.username = data.login;
                 req.session.isAdmin = result[0].per_admin;
 
+                Personne.isSalarie(req.session.userid, function(err, resultPerType) {
+                    if (err) {
+                        console.log(err);
+                        return next(err);
+                    }
+
+                    var salarie = resultPerType[0].per_type;
+                    
+                    if (salarie === 1) {
+                        req.session.isSalarie = 1;
+                    } else {
+                        req.session.isSalarie = 0;
+                    }
+                });
+
                 res.session = req.session;
+
 
                 // Set cookies information.
                 /*res.cookie('login_token', +new Date(), {
