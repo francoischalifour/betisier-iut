@@ -124,7 +124,7 @@ module.exports.getLastCitation = function(callback) {
             req = 'SELECT cit_libelle ';
             req += 'FROM citation c ';
             req += 'WHERE cit_valide = 1 ';
-            req += 'ORDER BY cit_date DESC ';
+            req += 'ORDER BY cit_date_valide DESC ';
             req += 'LIMIT 1';
 
             connection.query(req, callback);

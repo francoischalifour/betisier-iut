@@ -10,7 +10,6 @@ var path = './home/views/';
  * @param {object} res
  */
 module.exports.View = function(req, res, next) {
-    //TODO : Changer la date (dat valide)
     res.title = 'Accueil';
 
     Citation.getLastCitation(function(err, result) {
