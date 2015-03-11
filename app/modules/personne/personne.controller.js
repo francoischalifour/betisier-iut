@@ -84,7 +84,7 @@ module.exports.Create = function(req, res, next) {
 
     res.title = 'Ajouter une personne';
 
-    if (req.method == 'POST') {
+    if (req.method === 'POST') {
         var data = req.body;
 
         // Type of person (0 for étudiant, 1 for salarié).
