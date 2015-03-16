@@ -1,5 +1,6 @@
 {{#if nbCitation}}
 {{#if session.isAdmin}}
+{{#if nbCitationEnAttente}}
 <h2>Citations en attente ({{nbCitationEnAttente}})</h2>
 
 <table>
@@ -30,6 +31,7 @@
 </table>
 
 <h2>Liste des citations</h2>
+{{/if}}
 {{/if}}
 
 <p class="text-center">Il y a {{nbCitation}} citations enregistrées.</p>

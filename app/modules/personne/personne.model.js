@@ -67,6 +67,7 @@ module.exports.getPersonneById = function(per_num, callback) {
             req += 'LEFT JOIN salarie s ON s.per_num = p.per_num ';
             req += 'LEFT JOIN fonction f ON f.fon_num = s.fon_num ';
             req += 'WHERE p.per_num = ?';
+
             connection.query(req, [per_num], callback);
             connection.release();
         }
