@@ -191,6 +191,10 @@ module.exports.Delete = function(req, res, next) {
             console.log(err);
             return next(err);
         }
+
+        if (parseInt(result.affectedRows) === 0) {
+            res.unknown = true;
+        }
     });
 
     // If this is the active user, log him out.
@@ -198,7 +202,12 @@ module.exports.Delete = function(req, res, next) {
         res.redirect('/logout');
         return;
     } else {
-        res.render(path + 'delete', res);
+/*        console.log(res.unknown);
+
+        if (res.unknown)
+            res.render(path + 'deleteUnknown', res);
+        else*/
+            res.render(path + 'delete', res);
     }
 }
 
@@ -230,8 +239,6 @@ module.exports.Edit = function(req, res, next) {
 
     if (req.method === 'POST') {
         var data = req.body;
-
-        console.log(data);
 
         Personne.editPersonne(data, per_num, function(err, result) {
             if (err) {

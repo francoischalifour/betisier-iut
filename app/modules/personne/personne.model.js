@@ -154,10 +154,14 @@ module.exports.deletePersonne = function(per_num, callback) {
             connection.query('SELECT per_num FROM etudiant WHERE per_num = ?', [per_num], function(err, result) {
                 if (!err) {
                     // If this is a Etudiant.
-                    if (result.length === 1)
+                    if (result.length === 1) {
+                        connection.query('DELETE FROM vote WHERE per_num = ?', [per_num], callback);
+                        connection.query('DELETE FROM citation WHERE per_num_etu = ?', [per_num], callback);
                         connection.query('DELETE FROM etudiant WHERE per_num = ?', [per_num], callback);
-                    else
+                    } else {
                         connection.query('DELETE FROM salarie WHERE per_num = ?', [per_num], callback);
+                    }
+
 
                     // Delete the person.
                     connection.query('DELETE FROM personne WHERE per_num = ?', [per_num], callback);
