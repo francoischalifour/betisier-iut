@@ -260,7 +260,6 @@ module.exports.searchCitation = function(data, callback) {
  */
 
 module.exports.noteCitation = function(data, callback) {
-    //TODO : Etudiants ne peux pas noter ..
     db.getConnection(function(err, connection) {
         if (!err) {
             connection.query('INSERT INTO vote SET ?', data, callback);

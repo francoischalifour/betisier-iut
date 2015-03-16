@@ -45,17 +45,6 @@ module.exports.List = function(req, res, next) {
                 callback(null, resultCitEnAtt);
             });
         },
-        // Get the person's type.
-        function(callback) {
-            Personne.isSalarie(req.session.userid, function(err, resultPerType) {
-                if (err) {
-                    console.log(err);
-                    return next(err);
-                }
-
-                callback(null, resultPerType);
-            });
-        },
         // Has the user already voted?
         /*function(callback) {
             var cit_num = resultCit.cit_num;
@@ -81,7 +70,7 @@ module.exports.List = function(req, res, next) {
         res.nbCitationEnAttente = result[1].length;
 
         // If the user is a student or an admin, he can vote.
-        if (result[2].per_type === 0 || req.session.isAdmin) {
+        if (req.session.userid && !req.session.isSalarie || req.session.isAdmin) {
             res.canVote = true;
         }
 
@@ -278,6 +267,7 @@ module.exports.Search = function(req, res, next) {
         });
     } else {
         async.parallel([
+
             function(callback) {
                 Salarie.getAllSalarie(function(err, resultPer) {
                     if (err) {
