@@ -219,18 +219,10 @@ module.exports.Delete = function(req, res, next) {
  * @param {function} next
  */
 module.exports.Edit = function(req, res, next) {
-    // ISSUE : Headers already sent.
+    // ISSUE : Erreur interne
     // TODO : sélectionner les valeurs par défaut dans les selects.
-    // If the user is not logged in.
-    if (!req.session.userid || !req.session.username) {
-        res.redirect('/login');
-        return;
-    }
-
-    var per_num = req.params.id;
-
     // If the active user is not allowed.
-    if (!req.session.isAdmin && parseInt(per_num) !== req.session.userid) {
+    if (!req.session.isAdmin && parseInt(req.params.id) !== req.session.userid) {
         res.redirect('/people/all');
         return;
     }

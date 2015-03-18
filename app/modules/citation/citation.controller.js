@@ -70,7 +70,7 @@ module.exports.List = function(req, res, next) {
         res.nbCitationEnAttente = result[1].length;
 
         // If the user is a student or an admin, he can vote.
-        if (req.session.userid && !req.session.isSalarie || req.session.isAdmin) {
+        if (req.session.userid && !req.session.isSalarie || req.session.isAdmin && !req.session.isSalarie) {
             res.canVote = true;
         }
 
@@ -82,7 +82,7 @@ module.exports.List = function(req, res, next) {
         });
 
         /*if (result[2].hasAlready === 0) {
-            res.canVote = true;
+            res.hasAlready = false;
         }*/
 
         res.render(path + 'list', res);
@@ -322,7 +322,7 @@ module.exports.Search = function(req, res, next) {
 module.exports.Vote = function(req, res, next) {
     // TODO : empêcher de voter une deuxième fois (graphiquement).
     // If the user is not logged in or is an employee.
-    if (!req.session.userid || !req.session.username || req.session.isSalarie) {
+    if (!req.session.userid || !req.session.username || req.session.isSalarie && !req.session.isAdmin) {
         res.redirect('/login');
         return;
     }
