@@ -45,7 +45,7 @@
             <core-toolbar id="mainheader">
                 <paper-icon-button id="navicon" icon="menu"></paper-icon-button>
                 <span class="header-title middle indent">{{title}}</span>
-                <span class="header-description bottom indent">Bêtisier de l'IUT {{#if session.userid}} - Connecté en tant que <a href="/people/{{session.userid}}">{{session.username}}</a>{{/if}}</span>
+                <span class="header-description bottom indent">Bêtisier de l'IUT {{#if session.userid}} - Connecté en tant que <core-tooltip label="Voir mon profil" position="bottom"><a href="/people/{{session.userid}}">{{session.username}}</a></core-tooltip>{{/if}}</span>
                 <span flex></span>
                 {{> header}}
             </core-toolbar>

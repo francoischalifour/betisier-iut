@@ -101,7 +101,7 @@ module.exports.addPersonne = function(data, typePers, callback) {
                 if (!err) {
                     var lastId = result.insertId;
 
-                    // Add the étudiant or the salarié (0 for étudiant, 1 for salarié).
+                    // Add the student or the employee (0 for student, 1 for employee).
                     if (parseInt(typePers) === 0) {
                         var etudiant = {
                             per_num: lastId,
