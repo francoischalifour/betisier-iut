@@ -321,14 +321,20 @@ td a {
     color: inherit;
 }
 
+.td-final {
+    border-top: 1px solid #ddd;
+    text-align: left;
+    color: #999;
+}
+
 .table-none {
     width: 100%;
     margin: 0 auto;
+    margin-top: 24px;
     border-collapse: collapse;
     border-spacing: 0;
     background-color: #fff;
     box-shadow: none;
-    margin-top: 24px;
 }
 
 @media(min-width:896px) {
@@ -357,17 +363,14 @@ select {
 \* ---------------------------------------------------- */
 
 blockquote {
-    quotes: "\201C""\201D""\2018""\2019";
     margin: 0;
     padding: 16px;
     border-radius: 2px;
     border-left: 4px solid #ddd;
     color: #666;
-    background-color: #fafafa;
 }
 
 blockquote:before {
-    content: open-quote;
     margin-right: .25em;
     font-size: 4em;
     line-height: 0.1em;

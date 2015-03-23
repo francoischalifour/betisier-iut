@@ -1,0 +1,69 @@
+{{#if citation.cit_libelle}}
+<div layout horizontal center-justified>
+    <div class="card">
+
+        <div horizontal justified layout>
+            <div horizontal start-justified layout>
+                <div class="card-header">{{title}}</div>
+            </div>
+
+            <div layout horizontal end-justified>
+                <core-tooltip label="Noter cette citation" position="left">
+                    <a href="/citations/{{citation.cit_num}}/vote">
+                        <core-icon icon="editor:mode-edit"></core-icon>
+                    </a>
+                </core-tooltip>
+            </div>
+        </div>
+
+        <p>
+            <blockquote>{{citation.cit_libelle}}</blockquote>
+        </p>
+
+    </div>
+</div>
+
+{{#if nbNotes}}
+<div layout horizontal center-justified>
+    <div class="card">
+
+        <div class="card-header">Notes attribuées</div>
+
+        <table class="table-none">
+            <tr>
+                <th>Personne</th>
+                <th>Note</th>
+            </tr>
+            {{#each notes}}
+            <tr>
+                <td>
+                    <a href="/people/{{per_num}}">
+                        <core-tooltip label="Voir le profil" position="right">
+                            {{per_prenom}} {{per_nom}}
+                        </core-tooltip>
+                    </a>
+                </td>
+                <td>{{vot_valeur}}</td>
+            </tr>
+            {{/each}}
+            <tr>
+                <td class="td-final">Total</td>
+                <td class="td-final">{{citation.vot_moyenne}}</td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+{{/if}}
+{{else}}
+<div horizontal center-justified layout>
+    <div class="card">
+        <p class="text-center">Cette citation n'existe pas.</p>
+        <p class="text-center">
+            <paper-button>
+                <a href="/citations/all">Retour à la liste des citations</a>
+            </paper-button>
+        </p>
+    </div>
+</div>
+{{/if}}

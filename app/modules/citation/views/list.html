@@ -20,7 +20,7 @@
                 </core-tooltip>
             </a>
         </td>
-        <td>{{cit_libelle}}</td>
+        <td><a href="/citations/{{cit_num}}">{{cit_libelle}}</a></td>
         <td>{{cit_date}}</td>
         <td class="text-center">
             <a href="/citations/{{cit_num}}/delete">
@@ -64,7 +64,9 @@
                 </core-tooltip>
             </a>
         </td>
-        <td>{{cit_libelle}}</td>
+        <td>
+            <a href="/citations/{{cit_num}}">{{cit_libelle}}</a>
+        </td>
         <td class="text-center">{{cit_date}}</td>
         <td class="text-center">
             {{#if vot_valeur}}

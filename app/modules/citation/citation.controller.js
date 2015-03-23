@@ -90,6 +90,44 @@ module.exports.List = function(req, res, next) {
 }
 
 /**
+ * Shows a citation.
+ *
+ * @param {object}   req
+ * @param {object}   res
+ * @param {objet} next
+ */
+module.exports.View = function(req, res, next) {
+    var cit_num = req.params.id;
+
+    Citation.getCitationById(cit_num, function(err, result) {
+        if (err) {
+            console.log(err);
+            return next(err);
+        }
+
+        if (result.length === 0) {
+            res.title = 'Citation introuvable';
+            res.render(path + 'show', res);
+        } else {
+            res.title = 'Citation par ' + result[0].per_prenom + ' ' + result[0].per_nom;
+            res.citation = result[0];
+
+            Vote.getVoteByCitationId(cit_num, function(err, result) {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+
+                res.notes = result;
+                res.nbNotes = result.length;
+
+                res.render(path + 'show', res);
+            });
+        }
+    });
+}
+
+/**
  * Adds a new citation.
  *
  * @param {object} req

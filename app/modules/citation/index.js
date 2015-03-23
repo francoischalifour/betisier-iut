@@ -16,6 +16,7 @@ var router = express.Router()
 router.get('/all', CitationController.List);
 router.get('/create', CitationController.Create);
 router.post('/create', CitationController.Create);
+router.get('/:id', CitationController.View);
 router.get('/:id/delete', CitationController.Delete);
 router.get('/:id/validate', CitationController.Validate);
 router.get('/:id/vote', CitationController.Vote);

@@ -39,12 +39,6 @@ module.exports.List = function(req, res, next) {
  * @param {object} res
  */
 module.exports.View = function(req, res, next) {
-    // If the user is not logged in.
-/*    if (!req.session.userid || !req.session.username) {
-        res.redirect('/login');
-        return;
-    }*/
-
     var per_num = req.params.id;
 
     Personne.getPersonneById(per_num, function(err, result) {
@@ -55,6 +49,7 @@ module.exports.View = function(req, res, next) {
 
         if (result.length === 0) {
             res.title = 'Utilisateur inconnu';
+            res.render(path + 'show', res);
         } else {
             res.user = result[0];
 

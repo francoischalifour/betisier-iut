@@ -100,10 +100,11 @@ module.exports.getCitationById = function(cit_num, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req;
-            req = 'SELECT cit_libelle, c.per_num, per_nom, per_prenom ';
+            req = 'SELECT c.cit_num, cit_libelle, c.per_num, per_nom, per_prenom, AVG(vot_valeur) AS vot_moyenne ';
             req += 'FROM citation c ';
+            req += 'LEFT JOIN vote v ON v.cit_num = c.cit_num ';
             req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
-            req += 'WHERE cit_num = ? ';
+            req += 'WHERE c.cit_num = ? ';
 
             connection.query(req, [cit_num], callback);
             connection.release();
@@ -121,7 +122,7 @@ module.exports.getCitationByPersonId = function(per_num, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req;
-            req = 'SELECT cit_libelle ';
+            req = 'SELECT cit_num, cit_libelle ';
             req += 'FROM citation c ';
             req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
             req += 'WHERE c.per_num = ? AND cit_valide = 1';
