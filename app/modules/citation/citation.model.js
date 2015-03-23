@@ -245,8 +245,6 @@ module.exports.searchCitation = function(data, callback) {
         req += 'GROUP BY c.cit_num '
         req += 'ORDER BY cit_date DESC';
 
-        console.log(req);
-
         connection.query(req, callback);
         connection.release();
     });

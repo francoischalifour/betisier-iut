@@ -202,12 +202,12 @@ module.exports.Delete = function(req, res, next) {
         res.redirect('/logout');
         return;
     } else {
-/*        console.log(res.unknown);
+        /*        console.log(res.unknown);
 
-        if (res.unknown)
-            res.render(path + 'deleteUnknown', res);
-        else*/
-            res.render(path + 'delete', res);
+                if (res.unknown)
+                    res.render(path + 'deleteUnknown', res);
+                else*/
+        res.render(path + 'delete', res);
     }
 }
 

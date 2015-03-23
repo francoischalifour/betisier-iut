@@ -252,8 +252,6 @@ module.exports.Search = function(req, res, next) {
     if (req.method == 'POST') {
         var data = req.body;
 
-        console.log(data);
-
         Citation.searchCitation(data, function(err, result) {
             if (err) {
                 console.log(err);
@@ -380,4 +378,42 @@ module.exports.Vote = function(req, res, next) {
             });
         });
     }
+}
+
+/**
+ * Returns all notes from a citation.
+ *
+ * @param {object}   req
+ * @param {object}   res
+ * @param {objet} next
+ */
+module.exports.View = function(req, res, next) {
+    var cit_num = req.params.id;
+
+    Citation.getCitationById(cit_num, function(err, result) {
+        if (err) {
+            console.log(err);
+            return next(err);
+        }
+
+        res.json(result);
+    });
+}
+
+/**
+ * Returns all forbidden words.
+ *
+ * @param {object}   req
+ * @param {object}   res
+ * @param {objet} next
+ */
+module.exports.ForbiddenWords = function(req, res, next) {
+    Mot.getAllMot(function(err, result) {
+        if (err) {
+            console.log(err);
+            return next(err);
+        }
+
+        res.json(result);
+    });
 }

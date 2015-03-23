@@ -1,18 +1,30 @@
 (function() {
     'use strict';
 
+    var listeMot = [];
+
+    /**
+     * Gets all forbidden words.
+     */
+    function getAllForbiddenWords() {
+        $.ajax({
+            url: '/citations/forbidden-words',
+            success: function(mots) {
+                mots.forEach(function(mot) {
+                    listeMot.push(mot.mot_interdit);
+                });
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    }
+
     /**
      * Replaces forbidden words.
      */
     var replaceForbiddenWords = function() {
         var citation = document.getElementById('cit_libelle').value;
-        var listeMot = [];
-        var mots = document.getElementById('mots').querySelectorAll('li');
-
-        // Add forbidden words to the list
-        for (var i = 0; i < mots.length; i++) {
-            listeMot.push(mots[i].innerHTML);
-        }
 
         // Check if there is a forbidden word and replace it.
         listeMot.forEach(function(mot) {
@@ -39,6 +51,11 @@
     }
 
     /**
+     * Loads all forbidden words.
+     */
+    document.getElementById('cit_libelle').onfocus = getAllForbiddenWords;
+
+    /**
      * Replace forbidden words while typing.
      */
     document.getElementById('cit_libelle').onkeyup = replaceForbiddenWords;
@@ -53,9 +70,9 @@
      */
     document.getElementById('btnDialog').onclick = function() {
         var dialog = document.querySelector('paper-action-dialog');
-        if (!dialog) {
+        if (!dialog)
             return;
-        }
+
         dialog.toggle();
     }
 })();
