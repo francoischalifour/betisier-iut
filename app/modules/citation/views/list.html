@@ -13,7 +13,13 @@
     </tr>
     {{#each listeCitationEnAttente}}
     <tr>
-        <td><a href="/people/{{per_num}}">{{per_prenom}} {{per_nom}}</a></td>
+        <td>
+            <a href="/people/{{per_num}}">
+                <core-tooltip label="Voir le profil" position="right">
+                    {{per_prenom}} {{per_nom}}
+                </core-tooltip>
+            </a>
+        </td>
         <td>{{cit_libelle}}</td>
         <td>{{cit_date}}</td>
         <td class="text-center">
@@ -36,7 +42,7 @@
 
 <p class="text-center">Il y a {{nbCitation}} citations enregistrées.</p>
 
-<table>
+<table id="citationTable">
     <tr>
         <th>Auteur</th>
         <th>Citation</th>
@@ -51,10 +57,24 @@
     </tr>
     {{#each listeCitation}}
     <tr>
-        <td><a href="/people/{{per_num}}">{{per_prenom}} {{per_nom}}</a></td>
+        <td>
+            <a href="/people/{{per_num}}">
+                <core-tooltip label="Voir le profil" position="right">
+                    {{per_prenom}} {{per_nom}}
+                </core-tooltip>
+            </a>
+        </td>
         <td>{{cit_libelle}}</td>
         <td class="text-center">{{cit_date}}</td>
-        <td class="text-center">{{#if vot_valeur}}{{vot_valeur}}{{else}}-{{/if}}</td>
+        <td class="text-center">
+            {{#if vot_valeur}}
+                <core-tooltip label="Voir les notes attribuées" position="left">
+                    <div id="{{cit_num}}" class="note pointer">{{vot_valeur}}</div>
+                </core-tooltip>
+            {{else}}
+                -
+            {{/if}}
+        </td>
         {{#if ../canVote}}
         <td class="text-center">
             <a href="/citations/{{cit_num}}/vote">
@@ -72,6 +92,11 @@
     </tr>
     {{/each}}
 </table>
+
+<paper-action-dialog backdrop layered="false" transition="core-transition-center" heading="Notes attribuées" id="notePanel-4">
+    <ul id="auteurs"></ul>
+    <paper-button affirmative autofocus>Fermer</paper-button>
+</paper-action-dialog>
 {{else}}
 <p class="text-center">Il n'y a actuellement aucune citation enregistrée.</p>
 {{/if}}
@@ -79,3 +104,5 @@
 <a href="/citations/create" title="Ajouter une citation">
     <paper-fab icon="add"></paper-fab>
 </a>
+
+<script src="/js/load-votes.js"></script>

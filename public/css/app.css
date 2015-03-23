@@ -153,6 +153,10 @@ paper-checkbox {
     color: #f44336;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 /* ---------------------------------------------------- *\
         Header
 \* ---------------------------------------------------- */
@@ -338,12 +342,12 @@ select {
 
 blockquote {
     quotes: "\201C""\201D""\2018""\2019";
+    margin: 0;
     padding: 16px;
+    border-radius: 2px;
     border-left: 4px solid #ddd;
     color: #666;
-    margin: 0;
     background-color: #fafafa;
-    border-radius: 2px;
 }
 
 blockquote:before {
@@ -372,6 +376,25 @@ paper-fab {
         right: 2em;
         bottom: 2em;
     }
+}
+
+/* ---------------------------------------------------- *\
+        Tooltips
+\* ---------------------------------------------------- */
+
+core-tooltip::shadow .core-tooltip {
+    opacity: 0;
+    -webkit-transition: all 500ms cubic-bezier(0,1.92,.99,1.07);
+    transition: all 500ms cubic-bezier(0,1.92,.99,1.07);
+    -webkit-transform: translate3d(0,-6px,0);
+    transform: translate3d(0,-6px,0);
+}
+
+core-tooltip:hover::shadow .core-tooltip,
+core-tooltip:focus::shadow .core-tooltip {
+    opacity: 1;
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
 }
 
 /* ---------------------------------------------------- *\

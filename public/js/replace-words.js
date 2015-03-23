@@ -1,4 +1,4 @@
-(function() {
+$(function() {
     'use strict';
 
     var listeMot = [];
@@ -24,12 +24,12 @@
      * Replaces forbidden words.
      */
     var replaceForbiddenWords = function() {
-        var citation = document.getElementById('cit_libelle').value;
+        var citation = $('#cit_libelle').val();
 
         // Check if there is a forbidden word and replace it.
         listeMot.forEach(function(mot) {
             if ((citation.toLowerCase()).indexOf(mot.toLowerCase()) !== -1) {
-                document.getElementById('error').innerHTML = '<p><core-icon icon="error"></core-icon> Le mot <em>' + mot + '</em> n\'est pas autorisé.</p>';
+                $('#error').html('<p><core-icon icon="error"></core-icon> Le mot <em>' + mot + '</em> n\'est pas autorisé.</p>');
 
                 // Replace forbidden words with asterisks.
                 var newCitation = citation.toLowerCase().replace(mot.toLowerCase(), function(mot) {
@@ -45,7 +45,7 @@
                 });
 
                 // Replace the citation without the forbidden word.
-                document.getElementById('cit_libelle').value = newCitation;
+                $('#cit_libelle').val(newCitation);
             }
         });
     }
@@ -53,26 +53,26 @@
     /**
      * Loads all forbidden words.
      */
-    document.getElementById('cit_libelle').onfocus = getAllForbiddenWords;
+    $('#cit_libelle').on('focus', getAllForbiddenWords);
 
     /**
      * Replace forbidden words while typing.
      */
-    document.getElementById('cit_libelle').onkeyup = replaceForbiddenWords;
+    $('#cit_libelle').on('keyup', replaceForbiddenWords);
 
     /**
      * Replaces forbidden words on copy & paste.
      */
-    document.getElementById('cit_libelle').onchange = replaceForbiddenWords;
+    $('#cit_libelle').on('change', replaceForbiddenWords);
 
     /**
      * Toggles forbidden words dialog box.
      */
-    document.getElementById('btnDialog').onclick = function() {
+    $('#btnDialog').on('click', function() {
         var dialog = document.querySelector('paper-action-dialog');
         if (!dialog)
             return;
 
         dialog.toggle();
-    }
-})();
+    });
+});

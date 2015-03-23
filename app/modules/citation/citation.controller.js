@@ -390,7 +390,7 @@ module.exports.Vote = function(req, res, next) {
 module.exports.View = function(req, res, next) {
     var cit_num = req.params.id;
 
-    Citation.getCitationById(cit_num, function(err, result) {
+    Vote.getVoteByCitationId(cit_num, function(err, result) {
         if (err) {
             console.log(err);
             return next(err);

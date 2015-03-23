@@ -112,6 +112,27 @@ module.exports.getCitationById = function(cit_num, callback) {
 }
 
 /**
+ * Gets citation by a Person's ID.
+ *
+ * @param  {function} callback
+ * @return the citation
+ */
+module.exports.getCitationByPersonId = function(per_num, callback) {
+    db.getConnection(function(err, connection) {
+        if (!err) {
+            var req;
+            req = 'SELECT cit_libelle, c.per_num, per_nom, per_prenom ';
+            req += 'FROM citation c ';
+            req += 'INNER JOIN personne p ON p.per_num = c.per_num ';
+            req += 'WHERE per_num = ? ';
+
+            connection.query(req, [per_num], callback);
+            connection.release();
+        }
+    });
+}
+
+/**
  * Gets last citation.
  *
  * @param  {function} callback
