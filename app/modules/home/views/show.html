@@ -4,7 +4,10 @@
 
         <h4>Dernière blague</h4>
         <p>
-            <blockquote>{{lastCitation}}</blockquote>
+            <blockquote>
+                <a href="/citations/{{citation.cit_num}}">{{citation.cit_libelle}}</a>
+                <p><em>— par <a href="/people/{{citation.per_num}}">{{citation.per_prenom}} {{citation.per_nom}}</a></em></p>
+            </blockquote>
         </p>
     </div>
 

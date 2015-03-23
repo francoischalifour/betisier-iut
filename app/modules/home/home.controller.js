@@ -18,8 +18,7 @@ module.exports.View = function(req, res, next) {
             return next(err);
         }
 
-        res.citation = result;
-        res.lastCitation = res.citation[0].cit_libelle;
+        res.citation = result[0];
 
         res.render(path + 'show', res);
     });

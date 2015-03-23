@@ -137,10 +137,6 @@ core-selector a {
     color: #333;
 }
 
-paper-checkbox {
-    padding: 22px 22px 22px 0;
-}
-
 .text-center {
     text-align: center;
 }
@@ -376,6 +372,10 @@ blockquote:before {
     line-height: 0.1em;
     vertical-align: -0.4em;
     color: #ccc;
+}
+
+blockquote a {
+    color: inherit;
 }
 
 /* ---------------------------------------------------- *\
