@@ -20,6 +20,7 @@ var path = './citation/views/';
  * @param {object} res
  */
 module.exports.List = function(req, res, next) {
+    // TODO : empêcher de voter une deuxième fois (graphiquement).
     res.title = 'Liste des citations';
 
     async.parallel([
@@ -49,7 +50,7 @@ module.exports.List = function(req, res, next) {
         /*function(callback) {
             var cit_num = resultCit.cit_num;
             var per_num = req.session.userid;
-            Citation.hasAlreadyVoted(cit_num, per_num, function(err, resultCitVot) {
+            Citation.hasAlreadyVoted(cit_num, req.session.userid, function(err, resultCitVot) {
                 if (err) {
                     console.log(err);
                     return next(err);
@@ -75,9 +76,18 @@ module.exports.List = function(req, res, next) {
         }
 
         // Change numeric to string so Handlebars doesn't ignore the 0 value.
-        res.listeCitation.forEach(function(vote) {
-            if (vote.vot_valeur === 0) {
-                vote.vot_valeur = vote.vot_valeur.toString();
+        var hasAlreadyTab = []
+        res.listeCitation.forEach(function(citation) {
+            Citation.hasAlreadyVoted(citation.cit_num, req.session.userid, function(err, resultCitVot) {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+            });
+
+
+            if (citation.vot_valeur === 0) {
+                citation.vot_valeur = citation.vot_valeur.toString();
             }
         });
 
@@ -356,7 +366,6 @@ module.exports.Search = function(req, res, next) {
  * @param {object} res
  */
 module.exports.Vote = function(req, res, next) {
-    // TODO : empêcher de voter une deuxième fois (graphiquement).
     // If the user is not logged in or is an employee.
     if (!req.session.userid || !req.session.username || req.session.isSalarie && !req.session.isAdmin) {
         res.redirect('/login');

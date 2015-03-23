@@ -194,7 +194,7 @@ module.exports.editPersonne = function(data, per_num, callback) {
 
             connection.query('SELECT per_num FROM etudiant WHERE per_num = ?', [per_num], function(err, result) {
                 if (!err) {
-                    // If this is a Etudiant.
+                    // If this is a student.
                     if (result.length === 1) {
                         var etudiant = {
                             dep_num: data.dep_num,

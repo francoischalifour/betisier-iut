@@ -143,8 +143,9 @@ module.exports.getLastCitation = function(callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req;
-            req = 'SELECT cit_libelle ';
+            req = 'SELECT cit_num, cit_libelle, c.per_num, per_prenom, per_nom ';
             req += 'FROM citation c ';
+            req += 'INNER JOIN personne p ON p.per_num = c.per_num '
             req += 'WHERE cit_valide = 1 ';
             req += 'ORDER BY cit_date_valide DESC ';
             req += 'LIMIT 1';
