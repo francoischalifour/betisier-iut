@@ -321,6 +321,22 @@ td a {
     color: inherit;
 }
 
+.table-none {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: #fff;
+    box-shadow: none;
+    margin-top: 24px;
+}
+
+@media(min-width:896px) {
+    .tale-none {
+        width: 100%;
+    }
+}
+
 /* ---------------------------------------------------- *\
         Forms
 \* ---------------------------------------------------- */

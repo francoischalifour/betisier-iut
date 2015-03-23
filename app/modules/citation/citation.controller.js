@@ -387,7 +387,7 @@ module.exports.Vote = function(req, res, next) {
  * @param {object}   res
  * @param {objet} next
  */
-module.exports.View = function(req, res, next) {
+module.exports.Get = function(req, res, next) {
     var cit_num = req.params.id;
 
     Vote.getVoteByCitationId(cit_num, function(err, result) {

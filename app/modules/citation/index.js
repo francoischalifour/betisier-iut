@@ -22,8 +22,6 @@ router.get('/:id/vote', CitationController.Vote);
 router.post('/:id/vote', CitationController.Vote);
 router.get('/search', CitationController.Search);
 router.post('/search', CitationController.Search);
-router.get('/:id/view', CitationController.View);
-router.get('/forbidden-words', CitationController.ForbiddenWords);
 
 /**
  * Exports configured router.

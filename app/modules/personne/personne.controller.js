@@ -7,6 +7,7 @@ var Departement = require('../departement/departement.model');
 var Division = require('../division/division.model');
 var Fonction = require('../fonction/fonction.model');
 var Ville = require('../ville/ville.model');
+var Citation = require('../citation/citation.model');
 
 var path = './personne/views/';
 
@@ -39,10 +40,10 @@ module.exports.List = function(req, res, next) {
  */
 module.exports.View = function(req, res, next) {
     // If the user is not logged in.
-    if (!req.session.userid || !req.session.username) {
+/*    if (!req.session.userid || !req.session.username) {
         res.redirect('/login');
         return;
-    }
+    }*/
 
     var per_num = req.params.id;
 
@@ -63,9 +64,19 @@ module.exports.View = function(req, res, next) {
             }
 
             res.title = res.user.per_prenom + ' ' + res.user.per_nom;
-        }
 
-        res.render(path + 'show', res);
+            Citation.getCitationByPersonId(per_num, function(err, result) {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+
+                res.listeCitation = result;
+                res.nbCitation = result.length;
+
+                res.render(path + 'show', res);
+            });
+        }
     });
 }
 

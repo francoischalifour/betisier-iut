@@ -51,6 +51,23 @@
     </div>
 </div>
 
+{{#if nbCitation}}
+<div layout horizontal center-justified>
+    <div class="card">
+        <div class="card-header">Citations</div>
+
+        <table class="table-none">
+        {{#each listeCitation}}
+            <tr>
+                <td>{{cit_libelle}}</td>
+                <td class="text-center">{{cit_date}}</td>
+            </tr>
+        {{/each}}
+        </table>
+    </div>
+</div>
+{{/if}}
+
 {{#if canUpdate}}
 <div layout horizontal center-justified>
     <paper-button>
@@ -111,13 +128,16 @@
         context.canvas.height = 20;
         context.font = '14px RobotoDraft';
         context.fillText(per_tel, 0, 20);
-    })();
 
-    (function() {
         /**
          * Shows the delete panel.
          */
-        document.getElementById('deleteLink').onclick = function(e) {
+        var deleteLink = document.getElementById('deleteLink');
+
+        if (!deleteLink)
+            return
+
+        deleteLink.onclick = function(e) {
             e.preventDefault();
             document.getElementById('deletePanel').toggle();
         }

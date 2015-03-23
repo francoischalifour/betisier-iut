@@ -8,7 +8,7 @@ $(function() {
      */
     function getAllForbiddenWords() {
         $.ajax({
-            url: '/citations/forbidden-words',
+            url: '/api/mots/forbidden',
             success: function(mots) {
                 mots.forEach(function(mot) {
                     listeMot.push(mot.mot_interdit);
