@@ -107,39 +107,5 @@
 </div>
 {{/if}}
 
-<script>
-    /**
-     * Turns the telephone number into canvas.
-     */
-    $(function() {
-        'use strict';
-
-        var per_tel_span = document.getElementById('per_tel');
-
-        if (!per_tel_span)
-            return;
-
-        var per_tel = per_tel_span.innerHTML;
-
-        per_tel_span.remove();
-        var context = document.getElementById('per_tel_canvas').getContext('2d');
-
-        context.canvas.width = 100;
-        context.canvas.height = 20;
-        context.font = '14px RobotoDraft';
-        context.fillText(per_tel, 0, 20);
-
-        /**
-         * Shows the delete panel.
-         */
-        var deleteLink = document.getElementById('deleteLink');
-
-        if (!deleteLink)
-            return
-
-        deleteLink.onclick = function(e) {
-            e.preventDefault();
-            document.getElementById('deletePanel').toggle();
-        }
-    });
-</script>
+<script src="/js/phone-secure.js"></script>
+<script src="/js/delete-dialog.js"></script>

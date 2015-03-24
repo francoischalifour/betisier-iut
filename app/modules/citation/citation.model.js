@@ -100,7 +100,7 @@ module.exports.getCitationById = function(cit_num, callback) {
     db.getConnection(function(err, connection) {
         if (!err) {
             var req;
-            req = 'SELECT c.cit_num, cit_libelle, c.per_num, per_nom, per_prenom, AVG(vot_valeur) AS vot_moyenne ';
+            req = 'SELECT c.cit_num, cit_libelle, c.per_num, per_num_etu, per_nom, per_prenom, AVG(vot_valeur) AS vot_moyenne, per_num_valide, DATE_FORMAT(cit_date, "%d/%m/%Y") as cit_date, DATE_FORMAT(cit_date_valide, "%d/%m/%Y") as cit_date_valide, DATE_FORMAT(cit_date_depo, "%d/%m/%Y") as cit_date_depo ';
             req += 'FROM citation c ';
             req += 'LEFT JOIN vote v ON v.cit_num = c.cit_num ';
             req += 'INNER JOIN personne p ON p.per_num = c.per_num ';

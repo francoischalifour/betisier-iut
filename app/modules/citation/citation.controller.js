@@ -119,7 +119,7 @@ module.exports.View = function(req, res, next) {
             res.title = 'Citation introuvable';
             res.render(path + 'show', res);
         } else {
-            res.title = 'Citation par ' + result[0].per_prenom + ' ' + result[0].per_nom;
+            res.title = 'Citation de ' + result[0].per_prenom + ' ' + result[0].per_nom;
             res.citation = result[0];
 
             Vote.getVoteByCitationId(cit_num, function(err, result) {

@@ -14,23 +14,27 @@
     {{#each listeCitationEnAttente}}
     <tr>
         <td>
-            <a href="/people/{{per_num}}">
-                <core-tooltip label="Voir le profil" position="right">
+            <core-tooltip label="Voir le profil" position="right">
+                <a href="/people/{{per_num}}">
                     {{per_prenom}} {{per_nom}}
-                </core-tooltip>
-            </a>
+                </a>
+            </core-tooltip>
         </td>
         <td><a href="/citations/{{cit_num}}">{{cit_libelle}}</a></td>
         <td>{{cit_date}}</td>
         <td class="text-center">
-            <a href="/citations/{{cit_num}}/delete">
-                <core-icon icon="delete"></core-icon>
-            </a>
+            <core-tooltip label="Supprimer la citation" position="left">
+                <a href="/citations/{{cit_num}}/delete">
+                    <core-icon icon="delete"></core-icon>
+                </a>
+            </core-tooltip>
         </td>
         <td class="text-center">
-            <a href="/citations/{{cit_num}}/validate">
-                <core-icon icon="check"></core-icon>
-            </a>
+            <core-tooltip label="Valider la citation" position="left">
+                <a href="/citations/{{cit_num}}/validate">
+                    <core-icon icon="check"></core-icon>
+                </a>
+            </core-tooltip>
         </td>
     </tr>
     {{/each}}
@@ -79,16 +83,20 @@
         </td>
         {{#if ../canVote}}
         <td class="text-center">
-            <a href="/citations/{{cit_num}}/vote">
-                <core-icon icon="editor:mode-edit"></core-icon>
-            </a>
+            <core-tooltip label="Noter la citation" position="left">
+                <a href="/citations/{{cit_num}}/vote">
+                    <core-icon icon="editor:mode-edit"></core-icon>
+                </a>
+            </core-tooltip>
         </td>
         {{/if}}
         {{#if ../session.isAdmin}}
         <td class="text-center">
-            <a href="/citations/{{cit_num}}/delete">
-                <core-icon icon="delete"></core-icon>
-            </a>
+            <core-tooltip label="Supprimer la citation" position="left">
+                <a href="/citations/{{cit_num}}/delete">
+                    <core-icon icon="delete"></core-icon>
+                </a>
+            </core-tooltip>
         </td>
         {{/if}}
     </tr>
