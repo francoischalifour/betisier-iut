@@ -2,6 +2,8 @@
  * Toggles the delete panel.
  */
 (function() {
+    'use strict';
+
     var deleteLink = document.getElementById('deleteLink');
 
     if (!deleteLink)

@@ -69,6 +69,16 @@
 
             </div>
         </div>
+
+        {{#ifCond nbNotes '>' 1}}
+        <div layout horizontal center-justified>
+            <div class="card">
+                <div class="card-header">Graphique des notes</div>
+                <canvas id="stats" style="width: 100%; height: 300px; margin-top: 24px"></canvas>
+            </div>
+        </div>
+        {{/ifCond}}
+
         {{/if}}
     {{else}}
         <div horizontal center-justified layout>
@@ -95,3 +105,60 @@
         </div>
     </div>
 {{/if}}
+
+{{#ifCond nbNotes '>' 1}}
+<script src="/bower_components/Chart.js/Chart.min.js"></script>
+
+<script>
+$(function() {
+    'use strict';
+
+    var listeNotes = [];
+    var listeAuteurs = [];
+
+    /**
+     * Gets all notes.
+     */
+    $.ajax({
+        url: '/api/citations/' + {{citation.cit_num}},
+        async: false,
+        success: function(notes) {
+            notes.forEach(function(vote) {
+                listeNotes.push(vote.vot_valeur);
+                listeAuteurs.push(vote.per_prenom + ' ' + vote.per_nom);
+            });
+
+            showChart();
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    });
+
+    /**
+     * Shows the chart notes.
+     */
+    function showChart() {
+        var context = document.getElementById("stats").getContext("2d");
+
+        var data = {
+            labels: listeAuteurs,
+            datasets: [
+                {
+                    label: "Notes",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: listeNotes
+                }
+            ]
+        };
+
+        var myLineChart = new Chart(context).Line(data);
+    }
+});
+</script>
+{{/ifCond}}
