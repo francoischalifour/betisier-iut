@@ -20,7 +20,6 @@ var path = './citation/views/';
  * @param {object} res
  */
 module.exports.List = function(req, res, next) {
-    // TODO : empêcher de voter une deuxième fois (graphiquement).
     res.title = 'Liste des citations';
 
     async.parallel([
@@ -45,20 +44,7 @@ module.exports.List = function(req, res, next) {
 
                 callback(null, resultCitEnAtt);
             });
-        },
-        // Has the user already voted?
-        /*function(callback) {
-            var cit_num = resultCit.cit_num;
-            var per_num = req.session.userid;
-            Citation.hasAlreadyVoted(cit_num, req.session.userid, function(err, resultCitVot) {
-                if (err) {
-                    console.log(err);
-                    return next(err);
-                }
-
-                callback(null, resultCitVot);
-            });
-        }*/
+        }
     ], function(err, result) {
         if (err) {
             console.log(err);
@@ -69,31 +55,32 @@ module.exports.List = function(req, res, next) {
         res.nbCitation = result[0].length;
         res.listeCitationEnAttente = result[1];
         res.nbCitationEnAttente = result[1].length;
+        res.hasAlready = [];
+
+        res.listeCitation.forEach(function(citation) {
+            // Has the user already voted this citation?
+            Citation.hasAlreadyVoted(citation.cit_num, req.session.userid, function(err, resultCitVot) {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+
+                console.log(citation.cit_num + ' : ' + resultCitVot[0].hasAlready);
+                res.hasAlready.push(resultCitVot[0].hasAlready);
+            });
+
+            // Change numeric to string so Handlebars doesn't ignore the 0 value.
+            if (citation.vot_valeur === 0) {
+                citation.vot_valeur = citation.vot_valeur.toString();
+            }
+        });
 
         // If the user is a student or an admin, he can vote.
         if (req.session.userid && !req.session.isSalarie || req.session.isAdmin && !req.session.isSalarie) {
             res.canVote = true;
         }
 
-        // Change numeric to string so Handlebars doesn't ignore the 0 value.
-        var hasAlreadyTab = []
-        res.listeCitation.forEach(function(citation) {
-            Citation.hasAlreadyVoted(citation.cit_num, req.session.userid, function(err, resultCitVot) {
-                if (err) {
-                    console.log(err);
-                    return next(err);
-                }
-            });
-
-
-            if (citation.vot_valeur === 0) {
-                citation.vot_valeur = citation.vot_valeur.toString();
-            }
-        });
-
-        /*if (result[2].hasAlready === 0) {
-            res.hasAlready = false;
-        }*/
+        console.log('Résultat : ' + res.hasAlready);
 
         res.render(path + 'list', res);
     });

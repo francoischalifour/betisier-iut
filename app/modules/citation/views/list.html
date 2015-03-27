@@ -44,7 +44,7 @@
 {{/if}}
 {{/if}}
 
-<p class="text-center">Il y a {{nbCitation}} citations enregistrées.</p>
+<p class="text-center">Il y a <strong>{{nbCitation}}</strong> citations enregistrées.</p>
 
 <table id="citationTable">
     <tr>
@@ -83,11 +83,19 @@
         </td>
         {{#if ../canVote}}
         <td class="text-center">
+            {{hasAlready}}
+            {{../hasAlready}}
+            {{#if ../hasAlready}}
+            <core-tooltip label="Vous avez déjà noté cette citation" position="left">
+                -
+            </core-tooltip>
+            {{else}}
             <core-tooltip label="Noter la citation" position="left">
                 <a href="/citations/{{cit_num}}/vote">
                     <core-icon icon="editor:mode-edit"></core-icon>
                 </a>
             </core-tooltip>
+            {{/if}}
         </td>
         {{/if}}
         {{#if ../session.isAdmin}}
