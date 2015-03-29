@@ -1,6 +1,7 @@
 'use strict';
 
 var async = require('async');
+var q = require('q');
 
 var Citation = require('./citation.model');
 var Personne = require('../personne/personne.model');
@@ -9,7 +10,6 @@ var Mot = require('../mot/mot.model');
 var Vote = require('../vote/vote.model');
 
 var LoginController = require('../login/login.controller');
-var ErrorController = require('../error/error.controller');
 
 var path = './citation/views/';
 
@@ -55,24 +55,30 @@ module.exports.List = function(req, res, next) {
         res.nbCitation = result[0].length;
         res.listeCitationEnAttente = result[1];
         res.nbCitationEnAttente = result[1].length;
-        res.hasAlready = [];
+
+        var promises = [];
 
         res.listeCitation.forEach(function(citation) {
-            // Has the user already voted this citation?
-            Citation.hasAlreadyVoted(citation.cit_num, req.session.userid, function(err, resultCitVot) {
-                if (err) {
-                    console.log(err);
-                    return next(err);
-                }
-
-                console.log(citation.cit_num + ' : ' + resultCitVot[0].hasAlready);
-                res.hasAlready.push(resultCitVot[0].hasAlready);
-            });
+            // Create the object.
+            var deferred = q.defer();
+            promises.push(deferred.promise);
 
             // Change numeric to string so Handlebars doesn't ignore the 0 value.
             if (citation.vot_valeur === 0) {
                 citation.vot_valeur = citation.vot_valeur.toString();
             }
+
+            // Has the user already voted this citation?
+            Citation.hasAlreadyVoted(citation.cit_num, req.session.userid, function(err, resultCitVot) {
+                if (err) {
+                    console.log(err);
+                    deferred.reject(err);
+                    return next(err);
+                }
+
+                citation.hasAlready = resultCitVot[0].hasAlready;
+                deferred.resolve();
+            });
         });
 
         // If the user is a student or an admin, he can vote.
@@ -80,9 +86,13 @@ module.exports.List = function(req, res, next) {
             res.canVote = true;
         }
 
-        console.log('Résultat : ' + res.hasAlready);
-
-        res.render(path + 'list', res);
+        q.all(promises)
+            .then(function() {
+                res.render(path + 'list', res);
+            })
+            .catch(function(error) {
+                return next(error);
+            });
     });
 }
 
@@ -102,25 +112,20 @@ module.exports.View = function(req, res, next) {
             return next(err);
         }
 
-        if (result.length === 0) {
-            res.title = 'Citation introuvable';
+        res.title = 'Voir une citation';
+        res.citation = result[0];
+
+        Vote.getVoteByCitationId(cit_num, function(err, result) {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+
+            res.notes = result;
+            res.nbNotes = result.length;
+
             res.render(path + 'show', res);
-        } else {
-            res.title = 'Citation de ' + result[0].per_prenom + ' ' + result[0].per_nom;
-            res.citation = result[0];
-
-            Vote.getVoteByCitationId(cit_num, function(err, result) {
-                if (err) {
-                    console.log(err);
-                    return next(err);
-                }
-
-                res.notes = result;
-                res.nbNotes = result.length;
-
-                res.render(path + 'show', res);
-            });
-        }
+        });
     });
 }
 

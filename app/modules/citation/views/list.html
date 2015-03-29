@@ -1,6 +1,9 @@
 {{#if nbCitation}}
 {{#if session.isAdmin}}
 {{#if nbCitationEnAttente}}
+{{#each hasAlready}}
+    {{hasAlready}}
+{{/each}}
 <h2>Citations en attente ({{nbCitationEnAttente}})</h2>
 
 <table>
@@ -83,11 +86,11 @@
         </td>
         {{#if ../canVote}}
         <td class="text-center">
-            {{hasAlready}}
-            {{../hasAlready}}
-            {{#if ../hasAlready}}
-            <core-tooltip label="Vous avez déjà noté cette citation" position="left">
-                -
+            {{#if hasAlready}}
+            <core-tooltip label="Supprimer mon vote" position="left">
+                <a href="/vote/{{cit_num}}/delete">
+                    <core-icon icon="clear"></core-icon>
+                </a>
             </core-tooltip>
             {{else}}
             <core-tooltip label="Noter la citation" position="left">

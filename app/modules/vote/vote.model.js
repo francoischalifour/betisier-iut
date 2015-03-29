@@ -56,3 +56,21 @@ module.exports.getVoteByCitationId = function(cit_num, callback) {
         }
     });
 }
+
+/**
+ * Deletes a vote.
+ *
+ * @param  {number}   cit_num
+ * @param  {number}   per_num
+ * @param  {function} callback
+ */
+module.exports.deleteVoteById = function(cit_num, per_num, callback) {
+    db.getConnection(function(err, connection) {
+        if (!err) {
+            var req;
+            req = 'DELETE FROM vote WHERE cit_num = ? AND per_num = ?';
+            connection.query(req, [cit_num, per_num], callback);
+            connection.release();
+        }
+    })
+}

@@ -16,6 +16,7 @@
     "express-handlebars": "*",
     "express-session": "*",
     "mysql": "*",
+    "q": "^1.2.0",
     "string": "^3.0.0"
   }
 }
